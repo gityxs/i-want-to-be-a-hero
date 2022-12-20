@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-R33JEXMNXN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-R33JEXMNXN');
+    </script> -->
+    <!-- Google tag (gtag.js) -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-R33JEXMNXN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-R33JEXMNXN');
+    </script> -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.cdnfonts.com/css/pickle-pushing" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <title>I Want To Be A Hero</title>
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+</head>
+
+
+
+<body>
+    <header>
+        <!-- FPS setting to be revised -->
+        <!-- <select name="updateIntervals" id="updateIntervals" onchange="changeInterval(this.value)">
+            <option value="15">15FPS</option>
+            <option value="30">30FPS</option>
+            <option value="60">60FPS</option>
+        </select> -->
+        <section>
+            <button class="bannerButton" onclick="toggleMusic()">Music</button>
+            <input type="range" min="1" max="100" value="20" class="slider" id="volumeSlider"
+                onchange="setVolume(this.value)">
+            <button class="bannerButton" onclick="save()">Save Game</button>
+            <button class="bannerButton" onclick="load()">Load Game</button>
+            <button class="bannerButton" onclick="exportGame()">Export</button>
+            <button class="bannerButton" onclick="importGame()">Import</button>
+            <span class="pickle" id="versionText" style="float:right">v0.02 Alpha</span>
+            <button class="bannerButton" style="float:right" onclick="hardReset()">HARD RESET</button>
+        </section>
+
+        <audio controls muted id="audioSource" style="display: none;">
+            <source src="cyberpunk-street.mp3" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
+        <h1 class="title pickle">
+            I WANT TO BE A HERO
+        </h1>
+        <div style="width:100%">
+            <div class="pickle" style="text-align: center;">\/ SCROLL DOWN \/</div>
+        </div>
+
+    </header>
+
+    <main>
+        <section id="sidebar" class = "blockPanel"></section>
+        <section id="canvasLogWrap">
+            <div id="canvasWrap">
+                <canvas id="myCanvas"></canvas>
+            </div>
+            <div id="logBox" class="logBox"></div>
+        </section>
+        <div id="tabScrollWrapper">
+            <div id="tabScrollGrid">
+                <section class="infoBox" id="storyBox">
+                    <div class="blockHeader pickle" style="display: block">STORY</div>
+                    <div class="blockBody dotted oxanium" style="padding: 10px; text-align: justify;">
+                        <div id="storyText" style="height:50%;"></div>
+                        <div id="diaryContainer">
+                            <div class="subHeader">Diary</div>
+                            <div id="diaryGrid">
+                                <div id="diaryEntries">
+                                </div>
+                                <div id="diaryText" class="blockPanel">Select a diary entry to view.</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="infoBox" id="statusBox">
+                    <div class="blockHeader pickle">STATUS</div>
+                    <div class="blockBody dotted">
+                        <div id="barWrap">
+                            <span class="barText leftAlign pickle" id="playerLevelText">
+                                LEVEL
+                            </span>
+                            <span id="playerExperienceText" class="barText pickle">0</span>
+                            <progress id="playerExperienceBar" value="100" max="1000"></progress>
+                            <span class="barText leftAlign pickle">
+                                HEALTH
+                            </span>
+                            <span id="playerHealthText" class="barText pickle">0</span>
+                            <progress id="playerHealthBar" value="100" max="1000"></progress>
+                            <span id="playerInitiativeText" class="barText pickle">0</span>
+                            <progress id="playerInitiativeBar" value="100" max="1000"></progress>
+                        </div>
+                        <div class="statDisplay pickle blockPanel" id="nextMove">Next move: <span
+                                id="playerMoveText">0</span></div>
+                        <div class="statDisplay pickle" style="display: none;">
+                            Max health: <span id="playerMaxHealthDisplay">0</span>
+                        </div>
+                        <div class="pickle subHeader">Resources:</div>
+                        <div id="resourceGrid"
+                            style="display: grid; grid-template-columns: 1fr 1fr;grid-template-rows: 1fr;">
+                            <div class="pickle" style="font-size: 2.5vmin;margin: 1vmin;"> Money: <span
+                                    class="moneyText" style="font-size: 2.5vmin;" id="moneyText">0</span></div>
+                            <div class="pickle" style="font-size: 2.5vmin;margin: 1vmin;"> Reputation: <span
+                                    style="font-size: 2.5vmin;" class="reputationText" id="reputationText">0</span>
+                            </div>
+                        </div>
+                        <div class="pickle subHeader">Attributes:</div>
+                        <div id="statsGrid">
+                            <div class="statDisplay pickle">
+                                STR: <span class="strengthText" id="strengthText">0</span>
+                            </div>
+                            <div class="statDisplay pickle">
+                                TGH: <span class="toughnessText" id="toughnessText">0</span>
+                            </div>
+                            <div class="statDisplay pickle">
+                                MND: <span class="mindText" id="mindText">0</span>
+                            </div>
+                            <div class="statDisplay pickle">
+                                AGI: <span class="agilityText" id="agilityText">0</span>
+                            </div>
+                        </div>
+                        <div class="pickle subHeader">Active abilities:</div>
+                        <div class="blockBody" id="abilityLoadoutContainer" style="height:auto ;display: grid;grid-template-columns: auto;
+                        grid-auto-flow:column;column-gap: normal;justify-items: center;">
+                        </div>
+                        <div class="pickle subHeader">Training (<span id="trainingBarOverviewIcon"
+                                class="strengthText"></span>) <span id="trainingCanUpgradeText"></span></div>
+                        <div
+                            style="width: -webkit-fill-available;height: 40px;margin-left: 10px;margin-right: 10px;margin:1%">
+                            <progress id="trainingProgressBarOverview" class="trainingProgressBar"
+                                style="width:inherit;" value="100" max="1000"></progress>
+                        </div>
+                        <div class="pickle subHeader">Story Progression</div>
+                        <div id="storyRequirementsOverviewText" class="pickle" style="text-align: center;padding: 1%;">
+                        </div>
+                    </div>
+                </section>
+                <section class="infoBox" id="trainingBox">
+                    <div class="blockHeader pickle">TRAINING</div>
+                    <div id="trainingAreaDisplay" class="blockBody dotted">
+                        <div id="trainingAreaName" class="statDisplay pickle"></div>
+                        <div style="width: -webkit-fill-available;height: 40px;margin-left: 10px;margin-right: 10px;">
+                            <progress id="trainingProgressBar" class="trainingProgressBar" style="width:inherit;"
+                                value="100" max="1000"></progress>
+                        </div>
+                        <div class="statDisplay pickle"
+                            style="text-transform:capitalize ; font-size: 16px; font-weight: normal;">
+                            Currently training: <span id="currentTrainingAttribute"></span></div>
+                        <div id="trainingButtonWrap">
+                            <button class="attributeButton strengthText"
+                                onclick="changeTrainingAttribute(attribute.strength)"></button>
+                            <button class="attributeButton toughnessText"
+                                onclick="changeTrainingAttribute(attribute.toughness)"></button>
+                            <button class="attributeButton   mindText"
+                                onclick="changeTrainingAttribute(attribute.mind)"></button>
+                            <button class="attributeButton agilityText"
+                                onclick="changeTrainingAttribute(attribute.agility)"></button>
+                        </div>
+                        <div class="pickle" style="margin:5px;margin-top:1em;margin-bottom:1em">Attributes per session:
+                            <span id="trainingReward"></span>
+                        </div>
+                        <div class="pickle center biggerText">Attributes per session: <span id="trainingReward"></span>
+                        </div>
+                        <button class="pickle" id="trainingUpgradeButton" onclick="upgradeTrainingArea()"
+                            onmouseenter="updateTrainingNextText()" onmouseleave="updateTrainingText()">Upgrade: <span
+                                id="trainingUpgradeCost"></span></button>
+                        <div class="subHeader pickle">Base attributes from training</div>
+                        <div id="statsGrid"
+                            style="display: grid; grid-template-columns: 1fr 1fr;grid-template-rows: 1fr 1fr; gap:1em; margin:1em;  ">
+                            <div id="strengthStatText" class="statDisplay pickle">
+                                Strength: <span class="strengthText" id="strengthSoftcapText">0</span>
+                            </div>
+                            <div id="toughhnessStatText" class="statDisplay pickle">
+                                Toughness: <span class="toughnessText" id="toughnessSoftcapText">0</span>
+                            </div>
+                            <div id="mindStatText" class="statDisplay pickle">
+                                Mind: <span class="mindText" id="mindSoftcapText">0</span>
+                            </div>
+                            <div id="agilityStatText" class="statDisplay pickle">
+                                Agility: <span class="agilityText" id="agilitySoftcapText">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="infoBox" id="areasBox">
+                    <div class="blockHeader pickle">AREAS</div>
+                    <div id="selectArea" class="blockBody dotted" style="box-sizing: border-box; padding: 10px; text-align:justify; display: block;
+                font-family: 'Pickle Pushing', sans-serif;
+                font-size: 24px;
+                font-weight:lighter ;">
+                    </div>
+
+                </section>
+                <section class="infoBox" id="abilitiesBox">
+                    <div class="blockHeader pickle" style="display: block">ABILITIES</div>
+                    <div class="blockBody dotted pickle">
+                        <div id="abilityRequirementsGrid" style="height:100%;width:100%;display: grid;
+                        grid-template-columns: 20% 80%;grid-template-rows: 10%; grid-auto-rows: 10%;
+                        justify-content: center;row-gap: 2.5vh; padding: 2%;box-sizing: border-box;"></div>
+                    </div>
+                </section>
+                <section class="infoBox" id="skillsBox">
+                    <div class="blockHeader pickle" style="display: block">SKILLS</div>
+                    <div class="blockBody dotted pickle" id="skillsWrap">
+                        <div>Class: <span id="classText"></span></div>
+                        <div>Points available: <span id="passivePointsText"></span></div>
+                        <button class="bannerButton" style="position: absolute;top:0;right:0;"
+                            onclick="resetSkills()">Reset</button>
+                        <!-- <div class="tooltip"> Tooltip text<span class = "tooltiptext">TEST</span></div> -->
+                        <div class="gridSkills" id="passiveTreeGrid"></div>
+                    </div>
+                </section>
+                <section class="infoBox" id="helpBox">
+                    <div class="blockHeader pickle" style="display: block">HELP</div>
+                    <div class="blockBody dotted pickle" id="helpBody">
+                        Your hero automatically uses his skills in combat.
+                        <br \>
+                        <br \><span class="pickle strengthText">STR</span>is the main component of damage in physical
+                        moves.
+                        <br \><span class="pickle toughnessText">TGH</span>increases your health and damage
+                        reduction.
+                        <br \><span class="pickle mindText">MND</span>reduces your ability cooldowns.
+                        <br \><span class="pickle agilityText">AGI</span>increases your action speed (affects patrol).
+                        <br \>
+                        <br \>Your first move is Punch. Punch's damage ratio is 80% <span
+                            class="pickle strengthText">STR</span> 20% <span class="pickle agilityText">AGI</span>,
+                        which is to say that,
+                        that
+                        percentage of the respective attribute value is used in the move's damage formula.
+                        <br \>The damage formula is:
+                        <br \><img id="damageFormula" src="./damageFormulaInvert.png" />,
+                        where the second part is evaluated and then summed from every contributing attribute.
+                        <br \>
+                        <br \> The damage ratio of abilities can be found by hovering them on the "Abilities" tab.
+                        <br \>
+                        <br \>Attributes can be increased by training.
+                        <br \>
+                        <br \>Critical strike: chance to deal 50% more damage.
+                        <br \>
+                        <br \>Health regeneration: health regeneration per second in combat.
+                        <br \>
+                        <br \>Overwhelm: increases damage based on enemy current hp (higher hp = more damage).
+                        <br \>
+                        <br \>Takedown: increases damage based on enemy current hp (lower hp = more damage).
+                    </div>
+                </section>
+            </div>
+        </div>
+        </div>
+
+    </main>
+</body>
+
+</html>
+<script src="worker.js"></script>
+<script src="constants.js"></script>
+<script src="colors.js"></script>
+<script src="playerstats.js"></script>
+<script src="enemies.js "></script>
+<script src="areas.js"></script>
+<script src="story.js"></script>
+<script src="class.js"></script>
+<script src="training.js"></script>
+<script src="music.js"></script>
+<script src="main.js"></script>
