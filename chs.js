@@ -176,7 +176,7 @@ var cnItems = {
     "I should work on my skills so I can take down criminals more effectively. (Skills menu below)": "我应该努力提高自己的技能，这样我才能更有效地打击罪犯。 （下面的技能菜单）",
     "Time to clean the streets.": "是时候清理街道了。",
     "Time to fight crime": "是时候打击犯罪了",
-    "": "",
+    "Effects:": "效果:",
     "": "",
     "": "",
     "": "",
