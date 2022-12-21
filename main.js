@@ -132,7 +132,7 @@ class Player extends CombatEntity {
     constructor(data) {
         super();
         this.data = data;
-        this.name = "Hero";
+        this.name = "英雄";
         this.maxHealth = PLAYER_BASE_HEALTH + formulas.maxHealth(getEffectiveValue("toughness"));
         this.health = this.maxHealth;
         this.image = new Image(32, 32);
@@ -541,9 +541,9 @@ function renderLoop() {
             ctxBuffer.font = `80px Pickle Pushing`;
             ctxBuffer.fillStyle = "white";
             ctxBuffer.textAlign = 'center';
-            ctxBuffer.fillText("DEFEAT!", cBuffer.width / 2, cBuffer.height / 2);
+            ctxBuffer.fillText("被击败!", cBuffer.width / 2, cBuffer.height / 2);
             ctxBuffer.font = `24px Pickle Pushing`;
-            ctxBuffer.fillText("Getting up and trying again...", cBuffer.width / 2, cBuffer.height / 2 + 50);
+            ctxBuffer.fillText("爬起来再试一次...", cBuffer.width / 2, cBuffer.height / 2 + 50);
             ctxBuffer.textAlign = 'left';
             break;
         case "InPatrol":
@@ -557,7 +557,7 @@ function renderLoop() {
             ctxBuffer.fillStyle = "white";
             ctxBuffer.textAlign = 'center';
 
-            ctxBuffer.fillText((currentArea.patrolTime - currentArea.patrolCounter > 500) ? "Patrolling..." : "FIGHT!", cBuffer.width / 2, cBuffer.height / 2 + 30);
+            ctxBuffer.fillText((currentArea.patrolTime - currentArea.patrolCounter > 500) ? "巡视..." : "战斗!", cBuffer.width / 2, cBuffer.height / 2 + 30);
             ctxBuffer.textAlign = 'left';
             break;
         default:
