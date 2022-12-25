@@ -251,7 +251,7 @@ skillLibrary = {
                 effectMagnitude: 0.02,
             },
             maxLevel: 50,
-            cost: Array(10).fill(1).concat(Array(10).fill(2), Array(10).fill(3), Array(10).fill(4),Array(10).fill(5)),
+            cost: Array(10).fill(1).concat(Array(10).fill(2), Array(10).fill(3), Array(10).fill(4), Array(10).fill(5)),
         },
         'sh_0_1': {
             id: 'sh_0_1',
@@ -262,10 +262,10 @@ skillLibrary = {
                 type: 0, // attribute boost
                 effectTarget: "strength",
                 effectType: "multPercent", //additiveFlat, additivePercent, multPercent
-                effectMagnitude: 1.5,
+                effectMagnitude: 1.25,
             },
             maxLevel: 3,
-            cost: [1, 10, 100],
+            cost: [10, 100, 1000],
             requires: { 'sh_0_0': 10 }
         },
         'sh_0_2': {
@@ -281,7 +281,7 @@ skillLibrary = {
             },
             maxLevel: 1,
             cost: [10],
-            requires: { 'sh_0_1': 2 }
+            requires: { 'sh_0_1': 1 }
         },
         'sh_2_0': {
             id: 'sh_2_0',
@@ -311,7 +311,7 @@ skillLibrary = {
                 effectMagnitude: 0.02,
             },
             maxLevel: 50,
-            cost: Array(10).fill(1).concat(Array(10).fill(2), Array(10).fill(3), Array(10).fill(4),Array(10).fill(5)),
+            cost: Array(10).fill(1).concat(Array(10).fill(2), Array(10).fill(3), Array(10).fill(4), Array(10).fill(5)),
         },
         'es_0_1': {
             id: 'es_0_1',
@@ -322,10 +322,10 @@ skillLibrary = {
                 type: 0, // attribute boost
                 effectTarget: "mind",
                 effectType: "multPercent", //additiveFlat, additivePercent, multPercent
-                effectMagnitude: 1.5,
+                effectMagnitude: 1.25,
             },
             maxLevel: 3,
-            cost: [1, 10, 100],
+            cost: [10, 100, 1000],
             requires: { 'es_0_0': 10 }
         },
         'es_0_2': {
@@ -341,7 +341,7 @@ skillLibrary = {
             },
             maxLevel: 1,
             cost: [10],
-            requires: { 'es_0_1': 2 }
+            requires: { 'es_0_1': 1 }
         },
         'es_1_0': {
             id: 'es_1_0',
@@ -374,48 +374,50 @@ skillLibrary = {
         },
     },
     "mutant": {
-        'mu_0': {
-            id: 'mu_0',
+        'mu_0_0': {
+            id: 'mu_0_0',
+            name: 'Rapid Evolution',
+            iconName: 'milerun',
+            desc: 'Your constitution rapidly adapts to any new challenge',
+            effect: {
+                type: 0, // attribute boost
+                effectTarget: "toughness",
+                effectType: "additivePercent", //additiveFlat, additivePercent, multPercent
+                effectMagnitude: 0.02,
+            },
+            maxLevel: 50,
+            cost: Array(10).fill(1).concat(Array(10).fill(2), Array(10).fill(3), Array(10).fill(4), Array(10).fill(5)),
+        },
+        'mu_0_1': {
+            id: 'mu_0_1',
+            name: 'Synthetic Body',
+            iconName: 'milerun',
+            desc: 'Your body doesnt break or tear, it just deforms and reforms.',
+            effect: {
+                type: 0, // attribute boost
+                effectTarget: "toughness",
+                effectType: "multPercent", //additiveFlat, additivePercent, multPercent
+                effectMagnitude: 1.25,
+            },
+            maxLevel: 3,
+            cost: [10, 100, 1000],
+            requires: { 'mu_0_0': 10 }
+        },
+        'mu_0_2': {
+            id: 'mu_0_2',
             name: 'Mutant Healing Factor',
-            iconName: 'calisthenics',
+            iconName: 'milerun',
             desc: 'Your cells are brimming with activity, wounds that take days to heal close in minutes',
             effect: {
                 type: 1, // attribute boost
                 effectTarget: "healthRegeneration",
                 effectType: "additiveFlat", //additiveFlat, additivePercent, multPercent
-                effectMagnitude: 0.01,
+                effectMagnitude: 0.0015,
             },
-            maxLevel: 5,
-            cost: [5, 10, 20, 40, 80],
+            maxLevel: 3,
+            cost: [10, 100, 1000],
+            requires: { 'mu_0_1': 1 }
         },
-        'mu_1': {
-            id: 'mu_1',
-            name: 'Crit chance',
-            iconName: 'calisthenics',
-            desc: 'Increases critical strike chance',
-            effect: {
-                type: 1, // attribute boost
-                effectTarget: "criticalChance",
-                effectType: "additiveFlat", //additiveFlat, additivePercent, multPercent
-                effectMagnitude: 0.1,
-            },
-            maxLevel: 10,
-            cost: Array(10).fill(1),
-        },
-        'mu_2': {
-            id: 'mu_2',
-            name: 'Overwhelm',
-            iconName: 'calisthenics',
-            desc: 'Increases overwhelm',
-            effect: {
-                type: 1, // attribute boost
-                effectTarget: "overwhelm",
-                effectType: "additiveFlat", //additiveFlat, additivePercent, multPercent
-                effectMagnitude: 0.1,
-            },
-            maxLevel: 5,
-            cost: Array(5).fill(1),
-        }
     },
     "cyborg": {
         'cy_0': {
@@ -464,7 +466,7 @@ skillLibrary = {
     "ninja": {
         'ni_0_0': {
             id: 'ni_0_0',
-            name: 'Unnatural Speed',
+            name: 'Feline Agility',
             iconName: 'shadowB',
             desc: 'The whole world seems one muscle twitch away.',
             effect: {
@@ -474,21 +476,21 @@ skillLibrary = {
                 effectMagnitude: 0.02,
             },
             maxLevel: 50,
-            cost: Array(10).fill(1).concat(Array(10).fill(2), Array(10).fill(3), Array(10).fill(4),Array(10).fill(5)),
+            cost: Array(10).fill(1).concat(Array(10).fill(2), Array(10).fill(3), Array(10).fill(4), Array(10).fill(5)),
         },
         'ni_0_1': {
             id: 'ni_0_1',
-            name: 'Feline Agility',
+            name: 'Unnatural Speed',
             iconName: 'studying',
             desc: 'The faster you go the faster you get.',
             effect: {
                 type: 0, // attribute boost
                 effectTarget: "agility",
                 effectType: "multPercent", //additiveFlat, additivePercent, multPercent
-                effectMagnitude: 1.5,
+                effectMagnitude: 1.25,
             },
             maxLevel: 3,
-            cost: [1, 10, 100],
+            cost: [10, 100, 1000],
             requires: { 'ni_0_0': 10 }
         },
         'ni_0_2': {
@@ -504,7 +506,7 @@ skillLibrary = {
             },
             maxLevel: 1,
             cost: [10],
-            requires: { 'ni_0_1': 2 }
+            requires: { 'ni_0_1': 1 }
         },
         'ni_1_0': {
             id: 'ni_1_0',
@@ -658,7 +660,7 @@ playerMoves = {
         damageRange: [0.8, 1.1],
         time: 3000,
         cooldownTime: 5000,
-        range: [0, 60],
+        range: [10, 60],
     },
     'psionicPulse': {
         type: 0,
@@ -684,14 +686,94 @@ playerMoves = {
         description: "Form a temporary barrier to block attacks.",
         iconName: "placeholder",
         damage: 0,
-        damageRatios: [0, 0, 0.2, 0],
+        damageRatios: [0, 0, 0.6, 0],
         damageRange: [1, 1],
         effects: {
             'shield': 0,
         },
         time: 1000,
-        cooldownTime: 15000,
-        range: [0,0],
+        cooldownTime: 20000,
+        range: [0, 0],
+    },
+    'repulsionWave': {
+        type: 0,
+        category: 'melee',
+        name: "Repulsion Wave",
+        description: "Emit reality-altering waves to give you some space",
+        iconName: "placeholder",
+        damage: 0,
+        damageRatios: [0, .1, .2, 0],
+        damageRange: [1, 1],
+        effects: {
+            'knockback': 10,
+            'aoe': 20,
+            'repeat': 0.75,
+        },
+        time: 500,
+        cooldownTime: 5000,
+        range: [20, 20],
+    },
+    //Mutant
+    'bulkFist': {
+        type: 0,
+        category: 'melee',
+        name: "Bulk Fist",
+        description: "Enlarge your fist to deliver a solid blow.",
+        iconName: "bulkFist",
+        damage: 1,
+        damageRatios: [.5, .8, 0, 0],
+        damageRange: [1, 1.1],
+        time: 4000,
+        cooldownTime: 0,
+        range: [5, 5],
+    },
+    'tentaclePull': {
+        type: 0,
+        category: 'melee',
+        name: "Tentacle Pull",
+        description: "Morph your arm out into a tentacle and pull your foe closer",
+        iconName: "tentaclePull",
+        damage: 1,
+        damageRatios: [.1, .3, 0, 0],
+        damageRange: [1, 1],
+        effects: {
+            'pull': 30
+        },
+        time: 1500,
+        cooldownTime: 5000,
+        range: [60, 60],
+    },
+    'corrosiveBurst': {
+        type: 0,
+        category: 'melee',
+        name: "Corrosive Burst",
+        description: "Your skin explodes, covering nearby foes in acid.",
+        iconName: "corrosiveBurst",
+        damage: 1,
+        damageRatios: [0, 1.5, 0.5, 0],
+        damageRange: [0.8, 1.2],
+        effects: {
+            'aoe': 10
+        },
+        time: 4000,
+        cooldownTime: 10000,
+        range: [10, 10],
+    },
+    'engulf': {
+        type: 0,
+        category: 'melee',
+        name: "Engulf",
+        description: "Try to completely subdue your target by englufing them. Deals extra damage to damaged enemies.",
+        iconName: "engulf",
+        damage: 1,
+        damageRatios: [3, 7, 0, 0],
+        damageRange: [0.9, 1],
+        effects: {
+            'takedown': 1,
+        },
+        time: 6000,
+        cooldownTime: 30000,
+        range: [5, 5],
     },
     //Superhuman
     'simplePunch': {
@@ -712,12 +794,15 @@ playerMoves = {
         category: 'melee',
         name: "Multiple Simple Punches",
         description: "I fear not the man who has practiced 10,000 punches once, but I fear the man who has practiced one 10,000 punches, 10,000 times.",
-        iconName: "punch",
+        iconName: "multipleSimplePunches",
         damage: 1,
-        damageRatios: [.6, 0, 0, .5],
+        damageRatios: [.3, 0, 0, .3],
         damageRange: [0.8, 1.2],
-        time: 1000,
-        cooldownTime: 1000,
+        effects: {
+            'repeat': 0.5,
+        },
+        time: 500,
+        cooldownTime: 2000,
         range: [5, 5],
     },
     'titanicSwing': {
@@ -741,7 +826,7 @@ playerMoves = {
         category: 'ranged',
         name: "Air Cannon",
         description: "You punch the air so hard that a shockwave is launched towards the enemy",
-        iconName: "jab",
+        iconName: "airCannon",
         damage: 1,
         damageRatios: [1, 0, 0, 0],
         damageRange: [1, 1],
@@ -758,16 +843,16 @@ playerMoves = {
         category: 'ranged',
         name: "Second Wind",
         description: "Take a few breaths and let your supernatural constitution catch up.",
-        iconName: "placeholder",
+        iconName: "secondWind",
         damage: 0,
         damageRatios: [0.1, 1, 0, 0],
         damageRange: [1, 1],
         effects: {
             'heal': 0,
         },
-        time: 3000,
-        cooldownTime: 12000,
-        range: [0,0],
+        time: 1000,
+        cooldownTime: 14000,
+        range: [0, 0],
     },
     //NINJA
     'katana': {
@@ -775,7 +860,7 @@ playerMoves = {
         category: 'melee',
         name: "Katana",
         description: "A ninja's weapon (?).",
-        iconName: "throwingKnife",
+        iconName: "katana",
         damage: 1,
         damageRatios: [.2, 0, 0, 1],
         damageRange: [0.8, 1.2],
@@ -801,16 +886,17 @@ playerMoves = {
         category: 'ranged',
         name: "Shuriken",
         description: "Launch a number of shuriken at your foes.",
-        iconName: "throwingKnife",
+        iconName: "shuriken",
         damage: 1,
         damageRatios: [0, 0, 0.1, .3],
         damageRange: [1, 1.1],
         effects: {
             'aoe': 5,
+            'repeat': 0.5,
         },
         time: 500,
         cooldownTime: 500,
-        range: [10, 50],
+        range: [10, 60],
     },
     'flashStep': {
         type: 1,
@@ -821,7 +907,23 @@ playerMoves = {
         damage: 0,
         time: 500,
         cooldownTime: 5000,
-        range: [20,20],
+        range: [20, 20],
+    },
+    'bladeStorm': {
+        type: 0,
+        category: 'melee',
+        name: "Blade Storm",
+        description: "Unleash a flurry of slashes in a surge of energy.",
+        iconName: "bladeStorm",
+        damage: 0,
+        damageRatios: [0.1, 0, 0, 0.15],
+        damageRange: [0.5, 1.5],
+        effects: {
+            'repeat': 0.9,
+        },
+        time: 100,
+        cooldownTime: 10000,
+        range: [5, 5],
     },
     'walk': {
         type: 1,
@@ -832,7 +934,7 @@ playerMoves = {
         damage: 0,
         time: 1000,
         cooldownTime: 0,
-        range: [5,5],
+        range: [5, 5],
     },
     'wait': {
         type: 1,
@@ -843,7 +945,7 @@ playerMoves = {
         damage: 0,
         time: 1000,
         cooldownTime: 0,
-        range: [0,0],
+        range: [0, 0],
     }
 }
 abilityUnlocks = {
@@ -856,20 +958,22 @@ abilityUnlocks = {
     'superhuman': {
         0: ['simplePunch'],
         10: ['titanicSwing', 'multipleSimplePunches'],
-        25: ['airCannon','secondWind'],
+        25: ['airCannon', 'secondWind'],
     },
     'mutant': {
-        0: ['punch'],
+        0: ['bulkFist'],
+        10: ['corrosiveBurst', 'tentaclePull'],
+        25: ['engulf']
     },
     'esper': {
         0: ['spiritFist'],
         10: ['telekineticProjectile', 'psionicPulse'],
-        25: ['psionicBarrier']
+        25: ['psionicBarrier','repulsionWave']
     },
     'ninja': {
         0: ['katana'],
-        10: ['shadowStrike','shuriken'],
-        25:['flashStep']
+        10: ['shadowStrike', 'shuriken'],
+        25: ['flashStep','bladeStorm'],
     },
     'cyborg': {
         0: ['punch'],
@@ -883,13 +987,21 @@ let loadoutContainer = document.getElementById("abilityLoadoutContainer");
 let abilityRequirementsGrid = document.getElementById("abilityRequirementsGrid");
 abilityRequirementsGrid.append(previewRowHeader);
 abilityRequirementsGrid.append(previewRowBody);
+//version fixing stuff
+if (playerStats.class != 'human') { playerStats.abilitySlots = 4 } else { playerStats.abilitySlots = 3 };
 let slots = [];
-for (let index = 0; index < playerStats.abilitySlots; index++) {
-    let slot = document.createElement("select");
-    slot.setAttribute("class", "abilitySlot pickle");
-    slots.push(slot);
-    slot.setAttribute("onchange", `changeAbilitySlot(${index})`);
-    loadoutContainer.appendChild(slot);
+RebuildSlots();
+function RebuildSlots() {
+    loadoutContainer.innerHTML = "";
+    slots = [];
+    for (let index = 0; index < playerStats.abilitySlots; index++) {
+
+        let slot = document.createElement("select");
+        slot.setAttribute("class", "abilitySlot pickle");
+        slots.push(slot);
+        slot.setAttribute("onchange", `changeAbilitySlot(${index})`);
+        loadoutContainer.appendChild(slot);
+    }
 }
 
 checkAbilityRequirements();
@@ -944,7 +1056,7 @@ function populateAbilityRequirements() {
             b.style.backgroundImage = `url("${playerMoves[ability].iconName}Icon.png")`;
             c.append(b);
             let t = document.createElement("div");
-            t.setAttribute("class", "tooltiptext pickle");
+            t.setAttribute("class", "tooltiptext oxanium");
             t.innerHTML = generateAbilityRequirementTooltip(ability);
             b.appendChild(t);
         }
@@ -995,7 +1107,7 @@ function populatePassiveTree() {
         b.setAttribute("onclick", `checkSkillPurchase("${skill.id}")`)
         passiveTreeGrid.appendChild(b);
         let t = document.createElement("div");
-        t.setAttribute("class", "skilltooltiptext pickle");
+        t.setAttribute("class", "skilltooltiptext oxanium");
         t.innerHTML = generatePassiveTooltip(skill);
         b.appendChild(t);
         let l = document.createElement("div");
@@ -1073,8 +1185,7 @@ function generatePassiveTooltip(skill) {
     if (skill.hasOwnProperty("requires")) {
         requirementsText = "Requires:<br>"
         for (const [key, value] of Object.entries(skill.requires)) {
-            console.log(key)
-            requirementsText += `${skillLibrary[playerStats.class][key].name} (${value})<br>`
+            requirementsText += `${skillLibrary[playerStats.class][key].name} (${value})<br>`;
         }
     }
     switch (skill.effect.type) {
@@ -1158,28 +1269,28 @@ function generateAbilityRequirementTooltip(ability) {
                 stringDisplay += `${ratio}% <span class="${attributeId}Text">${attributeDisplayShort[attributeId]}</span><br />`;
             }
             stringDisplay += `Damage range: x${abilityData.damageRange[0]} - ${abilityData.damageRange[1]}<br />`
-            if(abilityData.hasOwnProperty("effects")){
+            if (abilityData.hasOwnProperty("effects")) {
                 stringDisplay += "Effects:<br>"
                 Object.keys(abilityData.effects).forEach(effect => {
-                    stringDisplay +=  `${effect}: ${abilityData.effects[effect]}<br>`;
+                    stringDisplay += `${effect}: ${abilityData.effects[effect]}<br>`;
                 })
             }
             break;
-    case 2:
-        stringDisplay += "Ratios:" + "<br />";
-        for (let attributeRatio = 0; attributeRatio < abilityData.damageRatios.length; attributeRatio++) {
-            let ratio = abilityData.damageRatios[attributeRatio] * 100;
-            if (ratio == 0) continue;
-            let attributeId = attributeIndexToId[attributeRatio];
-            stringDisplay += `${ratio}% <span class="${attributeId}Text">${attributeDisplayShort[attributeId]}</span><br />`;
-        }
-        if(abilityData.hasOwnProperty("effects")){
-            stringDisplay += "Effects:<br>"
-            Object.keys(abilityData.effects).forEach(effect => {
-                stringDisplay +=  `${effect}<br>`;
-            })
-        }
-        break;
+        case 2:
+            stringDisplay += "Ratios:" + "<br />";
+            for (let attributeRatio = 0; attributeRatio < abilityData.damageRatios.length; attributeRatio++) {
+                let ratio = abilityData.damageRatios[attributeRatio] * 100;
+                if (ratio == 0) continue;
+                let attributeId = attributeIndexToId[attributeRatio];
+                stringDisplay += `${ratio}% <span class="${attributeId}Text">${attributeDisplayShort[attributeId]}</span><br />`;
+            }
+            if (abilityData.hasOwnProperty("effects")) {
+                stringDisplay += "Effects:<br>"
+                Object.keys(abilityData.effects).forEach(effect => {
+                    stringDisplay += `${effect}<br>`;
+                })
+            }
+            break;
         default:
             break;
     }
@@ -1359,12 +1470,13 @@ function resetSkills() {
     }
 }
 
-function changeClass(className, keepLevel = false) {
-    if (className == playerStats.class) return;
+function changeClass(className, keep = false) {
+    //if (className == playerStats.class) return;
+    if (className != 'human') { playerStats.abilitySlots = 4; player.health = -1;} else { playerStats.abilitySlots = 3 };
     resetSkills();
     playerStats.class = className;
     populatePassiveTree();
-    if (!keepLevel) {
+    if (!keep) {
         playerStats.level = 0;
         playerStats.experience = 0;
         addPlayerExp(0);
@@ -1380,13 +1492,18 @@ function changeClass(className, keepLevel = false) {
             playerStats.equippedAbilities[index + 1] = null;
         }
     }
+    RebuildSlots();
     populateAbilitySlots();
+    if (!keep) {
+        playerStats.attributeSoftcaps = [10000, 10000, 10000, 10000];
+            playerStats.strength = 0.01*formulas.softcappedAttribute(0);
+            playerStats.toughness = 0.01*formulas.softcappedAttribute(1);
+            playerStats.mind = 0.01*formulas.softcappedAttribute(2);
+            playerStats.agility = 0.01*formulas.softcappedAttribute(3);
+        
+    }
     if (className != 'human') {
         playerStats.attributeSoftcaps = [10000, 10000, 10000, 10000];
-        playerStats.strength = 10;
-        playerStats.toughness = 10;
-        playerStats.mind = 10;
-        playerStats.agility = 10;
     } else {
         playerStats.attributeSoftcaps = [100, 100, 100, 100];
         playerStats.strength = 1;
@@ -1394,4 +1511,5 @@ function changeClass(className, keepLevel = false) {
         playerStats.mind = 1;
         playerStats.agility = 1;
     }
+    checkClassQuest()
 }

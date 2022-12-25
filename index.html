@@ -36,6 +36,7 @@
 <body>
     <script src="chs.js"></script>
     <script src="core.js"></script>
+    <div id="splashScreen" class = "splashScreen"><div class="pickle splashTitle splashFadeIn">I WANT TO BE A HERO</div></div>
     <header>
         <!-- FPS setting to be revised -->
         <!-- <select name="updateIntervals" id="updateIntervals" onchange="changeInterval(this.value)">
@@ -52,14 +53,14 @@
             <button class="bannerButton" onclick="exportGame()">Export</button>
             <button class="bannerButton" onclick="importGame()">Import</button>
             <span class="pickle" id="versionText" style="float:right">v0.02 Alpha</span>
-            <button class="bannerButton" style="float:right" onclick="hardReset()">HARD RESET</button>
+            <button class="bannerButton" onclick="hardReset()">HARD RESET</button>
         </section>
 
         <audio controls muted id="audioSource" style="display: none;">
             <source src="cyberpunk-street.mp3" type="audio/mp3">
             Your browser does not support the audio element.
         </audio>
-        <h1 class="title pickle">
+        <h1 class="title pickle" style="display: none;">
             I WANT TO BE A HERO
         </h1>
         <div style="width:100%">
@@ -69,7 +70,7 @@
     </header>
 
     <main>
-        <section id="sidebar" class = "blockPanel"></section>
+        <section id="sidebar" class="blockPanel"></section>
         <section id="canvasLogWrap">
             <div id="canvasWrap">
                 <canvas id="myCanvas"></canvas>
@@ -81,7 +82,7 @@
                 <section class="infoBox" id="storyBox">
                     <div class="blockHeader pickle" style="display: block">STORY</div>
                     <div class="blockBody dotted oxanium" style="padding: 10px; text-align: justify;">
-                        <div id="storyText" style="height:50%;"></div>
+                        <div id="storyText" class="verticalScroll" style="height:47%;"></div>
                         <div id="diaryContainer">
                             <div class="subHeader">Diary</div>
                             <div id="diaryGrid">
@@ -142,8 +143,7 @@
                         <div class="blockBody" id="abilityLoadoutContainer" style="height:auto ;display: grid;grid-template-columns: auto;
                         grid-auto-flow:column;column-gap: normal;justify-items: center;">
                         </div>
-                        <div class="pickle subHeader">Training (<span id="trainingBarOverviewIcon"
-                                class="strengthText"></span>) <span id="trainingCanUpgradeText"></span></div>
+                        <div class="pickle subHeader">Current activity: (<span id="trainingBarOverviewIcon"></span>) <span id="trainingCanUpgradeText"></span></div>
                         <div
                             style="width: -webkit-fill-available;height: 40px;margin-left: 10px;margin-right: 10px;margin:1%">
                             <progress id="trainingProgressBarOverview" class="trainingProgressBar"
@@ -157,32 +157,6 @@
                 <section class="infoBox" id="trainingBox">
                     <div class="blockHeader pickle">TRAINING</div>
                     <div id="trainingAreaDisplay" class="blockBody dotted">
-                        <div id="trainingAreaName" class="statDisplay pickle"></div>
-                        <div style="width: -webkit-fill-available;height: 40px;margin-left: 10px;margin-right: 10px;">
-                            <progress id="trainingProgressBar" class="trainingProgressBar" style="width:inherit;"
-                                value="100" max="1000"></progress>
-                        </div>
-                        <div class="statDisplay pickle"
-                            style="text-transform:capitalize ; font-size: 16px; font-weight: normal;">
-                            Currently training: <span id="currentTrainingAttribute"></span></div>
-                        <div id="trainingButtonWrap">
-                            <button class="attributeButton strengthText"
-                                onclick="changeTrainingAttribute(attribute.strength)"></button>
-                            <button class="attributeButton toughnessText"
-                                onclick="changeTrainingAttribute(attribute.toughness)"></button>
-                            <button class="attributeButton   mindText"
-                                onclick="changeTrainingAttribute(attribute.mind)"></button>
-                            <button class="attributeButton agilityText"
-                                onclick="changeTrainingAttribute(attribute.agility)"></button>
-                        </div>
-                        <div class="pickle" style="margin:5px;margin-top:1em;margin-bottom:1em">Attributes per session:
-                            <span id="trainingReward"></span>
-                        </div>
-                        <div class="pickle center biggerText">Attributes per session: <span id="trainingReward"></span>
-                        </div>
-                        <button class="pickle" id="trainingUpgradeButton" onclick="upgradeTrainingArea()"
-                            onmouseenter="updateTrainingNextText()" onmouseleave="updateTrainingText()">Upgrade: <span
-                                id="trainingUpgradeCost"></span></button>
                         <div class="subHeader pickle">Base attributes from training</div>
                         <div id="statsGrid"
                             style="display: grid; grid-template-columns: 1fr 1fr;grid-template-rows: 1fr 1fr; gap:1em; margin:1em;  ">
@@ -199,11 +173,22 @@
                                 Agility: <span class="agilityText" id="agilitySoftcapText">0</span>
                             </div>
                         </div>
+                        <div id="trainingAreaName" class="statDisplay pickle" style="text-overflow:ellipsis;white-space: nowrap; overflow: hidden;"></div>
+                        <div style="width: -webkit-fill-available;height: 40px;margin-left: 10px;margin-right: 10px;">
+                            <progress id="trainingProgressBar" class="trainingProgressBar" style="width:inherit;"
+                                value="100" max="1000"></progress>
+                        </div>
+                        <div id = "activityGrid" class="blockPanel" style="display:grid;grid-template-columns: 49.5% 49.5%;grid-auto-rows: min-content;
+                        height: 50%;gap:1%;overflow-y: scroll;overflow-x:hidden;">
+                            
+                        </div>
+
+                        
                     </div>
                 </section>
                 <section class="infoBox" id="areasBox">
                     <div class="blockHeader pickle">AREAS</div>
-                    <div id="selectArea" class="blockBody dotted" style="box-sizing: border-box; padding: 10px; text-align:justify; display: block;
+                    <div id="selectArea" class="blockBody dotted verticalScroll" style="box-sizing: border-box; padding: 10px; text-align:justify; display: block;
                 font-family: 'Pickle Pushing', sans-serif;
                 font-size: 24px;
                 font-weight:lighter ;">
@@ -231,9 +216,15 @@
                 </section>
                 <section class="infoBox" id="helpBox">
                     <div class="blockHeader pickle" style="display: block">HELP</div>
-                    <div class="blockBody dotted pickle" id="helpBody">
-                        Your hero automatically uses his skills in combat.
+                    <div class="blockBody dotted pickle verticalScroll  " id="helpBody" style="overflow-y:scroll">
+                        <div class="subHeader">Combat</div>
+                        Your hero automatically uses his abilities in combat. Combat is action gauge based, once it fills the prepared ability is used.
+                        You can also set which abilities to use once you unlock more by clicking on the slots on the status tab.
+                        Finding criminals takes some time (patrolling, affected by agility) after which you'll enter an encounter.
+                        If you are defeated in combat you'll take some downtime to recover (10 seconds).
                         <br \>
+                        <div class="subHeader">Attributes</div>
+                        
                         <br \><span class="pickle strengthText">STR</span>is the main component of damage in physical
                         moves.
                         <br \><span class="pickle toughnessText">TGH</span>increases your health and damage
@@ -241,7 +232,19 @@
                         <br \><span class="pickle mindText">MND</span>reduces your ability cooldowns.
                         <br \><span class="pickle agilityText">AGI</span>increases your action speed (affects patrol).
                         <br \>
-                        <br \>Your first move is Punch. Punch's damage ratio is 80% <span
+                        <br \>Attributes can be increased by training.
+                        <div class="subHeader">Training</div>
+                        Training is done through activities. Each completion gives PlayerLevel*AttributeRatio attributes.
+                        The starting activities are free but more rewarding activities that you unlock as you progress cost money to perform.
+                        <br \>
+                        As you complete the same activity, it gains experience and can rank up. Ranking up increases the reward multiplier.
+                        Ranking up needs more experience every time, but later ranks are successively more rewarding.
+                        <br \>
+                        New activities may not even be worth it until you gain some experience in doing them.
+                        <br \>
+                        The more of the activity's respective stat you have the more experience you earn doing it.
+                        <div class="subHeader">Abilities</div>
+                        <br \>Your first ability is Punch. Punch's damage ratio is 80% <span
                             class="pickle strengthText">STR</span> 20% <span class="pickle agilityText">AGI</span>,
                         which is to say that,
                         that
@@ -251,8 +254,13 @@
                         where the second part is evaluated and then summed from every contributing attribute.
                         <br \>
                         <br \> The damage ratio of abilities can be found by hovering them on the "Abilities" tab.
+                        <br \> Abilities also have a damage range, which modifies the final damage, a use time and a cooldown.
+                        Cooldowns only start AFTER the abiltiy is used. Some ranged skills have a minimum range, the screen is 100 units wide.
+                        
+                        <div class="subHeader">Additional mechanics</div>
+                        <br \>Heal: heal for an amount.
                         <br \>
-                        <br \>Attributes can be increased by training.
+                        <br \>Shield: gives temporary health points. Lost at the end of an encounter. Does not stack, stronger shields overwrite.
                         <br \>
                         <br \>Critical strike: chance to deal 50% more damage.
                         <br \>
