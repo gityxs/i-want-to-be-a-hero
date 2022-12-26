@@ -112,8 +112,10 @@
                         </div>
                         <div class="statDisplay pickle blockPanel" id="nextMove">Next move: <span
                                 id="playerMoveText">0</span></div>
-                        <div class="statDisplay pickle" style="display: none;">
-                            Max health: <span id="playerMaxHealthDisplay">0</span>
+                        <div class ="pickle blockPanel">
+                            <label for="quantity">Engagement distance:</label>
+                            <input class="pickle" style="background: whitesmoke;" type="number" onchange="changeEngagementRange()"
+                            id="engagementDistanceInput" name="quantity" min="5" max="70" step="5">
                         </div>
                         <div class="pickle subHeader">Resources:</div>
                         <div id="resourceGrid"
@@ -222,6 +224,9 @@
                         You can also set which abilities to use once you unlock more by clicking on the slots on the status tab.
                         Finding criminals takes some time (patrolling, affected by agility) after which you'll enter an encounter.
                         If you are defeated in combat you'll take some downtime to recover (10 seconds).
+                        <div class="subHeader">Movement</div>
+                        You can set the engagement range, which is how close your hero will try to get to the enemy.
+                        He will only move this close and not further, so make sure your engagement range matches your abilities! By default your hero cannot move back after closing distance. However, if you have an ability with 'Retreat' he will try to use it to move back to his engagement range if an enemy closes in.
                         <br \>
                         <div class="subHeader">Attributes</div>
                         

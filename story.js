@@ -131,7 +131,7 @@ const storyQuests = [
     },
     {
         title: `A New Beginning IV`,
-        text: `Ever since you defeated The Don mafia activity around your area has simmered down, but the strange incidents around the city continue. One day while walking the streets you her a woman running from the direction of the riverside, yelling, "A MONSTER! A MONSTER CAME OUT OF THE RIVER! HE'S KILLING EVERYONE!". This must be him. This time I won't lose.`,
+        text: `Ever since you defeated The Don mafia activity around your area has simmered down, but the strange incidents around the city continue. One day while walking the streets you hear a woman running from the direction of the riverside, yelling, "A MONSTER! A MONSTER CAME OUT OF THE RIVER! HE'S KILLING EVERYONE!". This must be him. This time I won't lose.`,
         requirementType: `defeat`,
         requirementTarget: [`crabman`],
         requirementAmount: [1],
@@ -149,7 +149,10 @@ const endOfStoryQuest = {
     requirementAmount: [1],
 };
 
-if(isOutdated){if(playerStats.storyProgress >=13)playerStats.storyProgress = 13;updateStoryQuest();}
+if(isOutdated){if(lastVersion.substr(0,4) == '0.02'){
+
+    if(playerStats.storyProgress >=13)playerStats.storyProgress = 13;updateStoryQuest();}
+}
 updateStoryQuest();
 updateDiaryEntries();
 

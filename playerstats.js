@@ -1,5 +1,6 @@
-const version = '0.03';
+const version = '0.03a';
 var isOutdated = false;
+var lastVersion;
 document.getElementById('versionText').innerHTML ='v'+version;
 const cleanPlayerStats = {
     experience: 0,
@@ -15,6 +16,7 @@ const cleanPlayerStats = {
     agility: 0,
     attributeSoftcaps: [100, 100, 100, 100],
     attributeTrainingModifier: [1, 1, 1, 1],
+    flatReduction: 0,
     healthRegeneration: 0,
     criticalChance: 0,
     overwhelm: 0,
@@ -36,6 +38,7 @@ const cleanPlayerStats = {
     activityLevels: {},
     abilityCooldowns: {},
     currentArea: 0,
+    engagementRange: 5,
 }
 
 var playerStats = {};
@@ -70,7 +73,7 @@ function getSecondaryAttribute(property) {
     return (baseValue
         + arraySum(Object.values(playerStats.effectMultipliers[property].additiveFlat)))
         * (1 + arraySum(Object.values(playerStats.effectMultipliers[property].additivePercent)))
-        * arrayMult(Object.values(playerStats.effectMultipliers[property].multPercent))
+        * arrayMult(Object.values(playerStats.effectMultipliers[property].multPercent));
 }
 function getTrainingModifier(attributeName) {
     let baseValue = playerStats.attributeTrainingModifier[attributeIdToIndex[attributeName]];
@@ -121,7 +124,7 @@ function load(file = null) {
             playerStats[property] = loadgame[property];
         });
         if (playerStats.class == 'Human') { playerStats.class = 'human' };
-        if (localStorage.getItem("version") != version){ isOutdated = true}
+        if (localStorage.getItem("version") != version){lastVersion = localStorage.getItem("version"); isOutdated = true;}
     } else {
         console.log("No savefile found");
     }
