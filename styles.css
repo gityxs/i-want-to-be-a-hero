@@ -340,7 +340,7 @@ main {
     padding: 0;
 }
 .sidebarButtonLocked::after {
-    content: 'LOCKED';
+    content: '未解锁';
     font-size: 1.6vw;
 }
 .blockHeader {
