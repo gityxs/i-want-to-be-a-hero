@@ -788,9 +788,9 @@ function renderLoop() {
             ctxBuffer.font = `80px Pickle Pushing`;
             ctxBuffer.fillStyle = "white";
             ctxBuffer.textAlign = 'center';
-            ctxBuffer.fillText("Resting...", cBuffer.width / 2, cBuffer.height / 2);
+            ctxBuffer.fillText("休息中...", cBuffer.width / 2, cBuffer.height / 2);
             ctxBuffer.font = `24px Pickle Pushing`;
-            ctxBuffer.fillText("Just... give me a second...", cBuffer.width / 2, cBuffer.height / 2 + 50);
+            ctxBuffer.fillText("只是...给我几秒钟...", cBuffer.width / 2, cBuffer.height / 2 + 50);
             ctxBuffer.textAlign = 'left';
             break;
         case "InDead":
