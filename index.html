@@ -49,7 +49,6 @@
             <input type="range" min="1" max="100" value="20" class="slider" id="volumeSlider"
                 onchange="setVolume(this.value)">
             <button class="bannerButton" onclick="save()">Save Game</button>
-            <button class="bannerButton" onclick="load()">Load Game</button>
             <button class="bannerButton" onclick="exportGame()">Export</button>
             <button class="bannerButton" onclick="importGame()">Import</button>
             <span class="pickle" id="versionText" style="float:right">v0.02 Alpha</span>
@@ -82,7 +81,7 @@
                 <section class="infoBox" id="storyBox">
                     <div class="blockHeader pickle" style="display: block">STORY</div>
                     <div class="blockBody dotted oxanium" style="padding: 10px; text-align: justify;">
-                        <div id="storyText" class="verticalScroll" style="height:47%;"></div>
+                        <div id="storyText" class="verticalScroll" style="height:50%;"></div>
                         <div id="diaryContainer">
                             <div class="subHeader">Diary</div>
                             <div id="diaryGrid">
@@ -110,12 +109,16 @@
                             <span id="playerInitiativeText" class="barText pickle">0</span>
                             <progress id="playerInitiativeBar" value="100" max="1000"></progress>
                         </div>
+                        <div id="expEstimate" class="pickle">Experience/min: <span id = "expEstimateText"></span></div>
                         <div class="statDisplay pickle blockPanel" id="nextMove">Next move: <span
                                 id="playerMoveText">0</span></div>
                         <div class ="pickle blockPanel">
                             <label for="quantity">Engagement distance:</label>
                             <input class="pickle" style="background: whitesmoke;" type="number" onchange="changeEngagementRange()"
                             id="engagementDistanceInput" name="quantity" min="5" max="70" step="5">
+                            <label for="quantity">Rest until HP:</label>
+                            <input class="pickle" style="background: whitesmoke;" type="number" onchange="changeRestPercentage()"
+                            id="restPercentageInput" name="quantity" min="0" max="100" step="5">%
                         </div>
                         <div class="pickle subHeader">Resources:</div>
                         <div id="resourceGrid"
@@ -157,7 +160,7 @@
                     </div>
                 </section>
                 <section class="infoBox" id="trainingBox">
-                    <div class="blockHeader pickle">TRAINING</div>
+                    <div class="blockHeader pickle">ACTIVITIES</div>
                     <div id="trainingAreaDisplay" class="blockBody dotted">
                         <div class="subHeader pickle">Base attributes from training</div>
                         <div id="statsGrid"
@@ -197,23 +200,43 @@
                     </div>
 
                 </section>
-                <section class="infoBox" id="abilitiesBox">
+                <!-- <section class="infoBox" id="abilitiesBox">
                     <div class="blockHeader pickle" style="display: block">ABILITIES</div>
                     <div class="blockBody dotted pickle">
                         <div id="abilityRequirementsGrid" style="height:100%;width:100%;display: grid;
                         grid-template-columns: 20% 80%;grid-template-rows: 10%; grid-auto-rows: 10%;
                         justify-content: center;row-gap: 2.5vh; padding: 2%;box-sizing: border-box;"></div>
                     </div>
-                </section>
+                </section> -->
                 <section class="infoBox" id="skillsBox">
-                    <div class="blockHeader pickle" style="display: block">SKILLS</div>
+                    <div class="blockHeader pickle" style="display: block">CLASS</div>
                     <div class="blockBody dotted pickle" id="skillsWrap">
                         <div>Class: <span id="classText"></span></div>
                         <div>Points available: <span id="passivePointsText"></span></div>
                         <button class="bannerButton" style="position: absolute;top:0;right:0;"
                             onclick="resetSkills()">Reset</button>
-                        <!-- <div class="tooltip"> Tooltip text<span class = "tooltiptext">TEST</span></div> -->
-                        <div class="gridSkills" id="passiveTreeGrid"></div>
+                        <div class="subHeader">Trees</div>
+                        <div id="subClassTabContainer"></div>
+                        <div id="passiveTreeContainer"class = "blockPanel verticalScroll" style="height: 76vh;">
+                            <!-- <div class="gridSkills" id="passiveTreeGrid"></div> -->
+                        </div>
+                    </div>
+                </section>
+                <section class="infoBox" id="prestigeBox">
+                    <div class="blockHeader pickle" style="display: block">PRESTIGE</div>
+                    <div class="blockBody dotted pickle verticalScroll">
+                        <div style ="line-height:1.5;" class="oxanium"> You can take the Y you found to unlock more of your power.<br>
+                            This will reset your attributes.<br>
+                            Your attribute softcaps will increase by 10% of their current value plus 50% of the effective value over the current softcap.<br>
+                            Softcaps will only increase for attributes which have reached their current softcap!<br>
+                            You gain 1% of the softcap as permanent attributes when you reset this way. (They cannot be lowered below that value for activities)<br>
+                            
+                        </div>
+                        <div class ="subHeader">Softcaps</div>
+                        <div id="attributePrestigeText" style="text-align: center;padding:3%">
+                            
+                        </div>
+                        <button style = "display:block; margin:auto" class="bannerButton" onclick="attributePrestige()">Take Y</button>
                     </div>
                 </section>
                 <section class="infoBox" id="helpBox">
@@ -290,6 +313,7 @@
 <script src="playerstats.js"></script>
 <script src="enemies.js "></script>
 <script src="areas.js"></script>
+<script src="prestige.js"></script>
 <script src="story.js"></script>
 <script src="class.js"></script>
 <script src="training.js"></script>

@@ -9,7 +9,7 @@ var ctxBuffer = cBuffer.getContext("2d");
 ctx.imageSmoothingEnabled = false;
 ctxBuffer.imageSmoothingEnabled = false;
 var leftWindow = document.getElementById("tabScrollWrapper");
-var tabNames = ['story', 'status', 'training', 'areas', 'abilities', 'skills', 'info'];
+var tabNames = ['story', 'status', 'activity', 'areas', 'class','prestige','info'];
 var sidebar = document.getElementById('sidebar');
 let activeTab = 0;
 for (let index = 0; index < tabNames.length; index++) {
@@ -22,6 +22,8 @@ for (let index = 0; index < tabNames.length; index++) {
     sidebar.append(b);
 }
 changeTab(0);
+if(playerStats.storyProgress >= 17){document.getElementById("prestigeBox").style.visibility = 'visible'} else {document.getElementById("prestigeBox").style.visibility = 'hidden'}
+if(playerStats.storyProgress >= 17){document.getElementById(`${tabNames[5]}TabButton`).setAttribute("class", "sidebarButton pickle");} else {document.getElementById(`${tabNames[5]}TabButton`).setAttribute("class", "sidebarButtonLocked pickle");}
 function changeTab(index) {
     if (index < 0 || index >= tabNames.length) return;
     leftWindow.scrollTo({ left: index * leftWindow.clientWidth, behaviour: 'smooth', });
@@ -75,6 +77,7 @@ class CombatEntity {
         this.health = 0;
         this.distance = 0;
         this.initiative = 0;
+        this.interrupt = 0;
         this.nextMove = null;
         this.nextMoveInitiative = 0;
         this.damageReduction = 0;
@@ -104,7 +107,11 @@ class CombatEntity {
             this.health = Math.min(this.health + this.maxHealth * this.healthRegeneration * logicTickTime / 1000, this.maxHealth);
         }
         if (this.nextMove != null) {
-            this.initiative += 1000 * logicTickTime / 1000 * this.actionSpeed;
+            let tickTime = logicTickTime;
+            if (this.interrupt > 0){this.interrupt -= tickTime};
+            if(this.interrupt <= 0){
+                this.initiative += 1000 * tickTime / 1000 * this.actionSpeed;
+            }
 
         } else {
             this.think();
@@ -147,6 +154,8 @@ class Player extends CombatEntity {
         this.portraitImage.src = "joePortrait.png";
         this.damageReduction = formulas.damageReduction(getEffectiveValue("toughness"));
         this.actionSpeed = formulas.actionSpeed(getEffectiveValue("agility"));
+        this.actionSpeed *= getSecondaryAttribute("actionSpeed");
+        this.powerMultiplier = getSecondaryAttribute("powerMultiplier");
         this.healthRegeneration = getSecondaryAttribute("healthRegeneration");
         this.criticalChance = getSecondaryAttribute("criticalChance");
         this.overwhelm = getSecondaryAttribute("overwhelm");
@@ -193,11 +202,23 @@ class Player extends CombatEntity {
                         break;
                 }
                 if (inRange) {
-                    let isCrit = (Math.random() < this.criticalChance);
+
                     let moveTakedown = this.takedown;
+                    let moveCritChance = this.criticalChance;
+                    let moveLifesteal = 0;
+                    let moveStun = 0;
                     if (this.nextMove.hasOwnProperty("effects")) {
                         Object.keys(this.nextMove.effects).forEach(effect => {
                             switch (effect) {
+                                case "stun":
+                                    moveStun+=  this.nextMove.effects[effect];
+                                    break;
+                                case "lifesteal":
+                                    moveLifesteal += this.nextMove.effects[effect];
+                                    break;
+                                case "criticalChance":
+                                    moveCritChance += this.nextMove.effects[effect];
+                                    break;
                                 case "takedown":
                                     moveTakedown += this.nextMove.effects[effect];
                                     break;
@@ -211,6 +232,7 @@ class Player extends CombatEntity {
                             }
                         });
                     }
+                    let isCrit = (Math.random() < moveCritChance);
                     let d1 = this.nextMove.damage
                         + this.nextMove.damageRatios[0] * (Math.sqrt(getEffectiveValue("strength") + 1) - 1)
                         + this.nextMove.damageRatios[1] * (Math.sqrt(getEffectiveValue("toughness") + 1) - 1)
@@ -223,6 +245,8 @@ class Player extends CombatEntity {
                     if (this.nextMove.hasOwnProperty("effects")) {
                         Object.keys(this.nextMove.effects).forEach(effect => {
                             switch (effect) {
+                                case "stun":
+                                    target.interrupt += moveStun*1000;
                                 case "repeat":
                                     break;
                                 case "takedown":
@@ -253,6 +277,9 @@ class Player extends CombatEntity {
                                             if (this.nextMove.effects.hasOwnProperty("knockback")) {
                                                 enemy.distance += this.nextMove.effects['knockback'];
                                             }
+                                            if (this.moveStun > 0) {
+                                                enemy.interrupt += this.moveStun*1000;
+                                            }
                                             let { died: killingBlow, d: dr } = enemy.takeDamage(d3);
                                             logConsole(`Hero ${isCrit ? "critically " : ""}hit ${enemy.name} with ${playerMoves[this.nextMoveKey].name} for ${format(dr)}(${format(d3)}) damage.`);
                                         }
@@ -260,7 +287,6 @@ class Player extends CombatEntity {
                                     break;
 
                                 default:
-                                    console.error("ERROR UNKOWN SKILL EFFECT");
                                     break;
                             }
                         });
@@ -268,6 +294,7 @@ class Player extends CombatEntity {
 
                     let { died: killingBlow, d: dr } = target.takeDamage(d3);
                     logConsole(`Hero ${isCrit ? "critically " : ""}hit ${this.target.name} with ${playerMoves[this.nextMoveKey].name} for ${format(dr)}(${format(d3)}) damage.`);
+                    if(moveLifesteal > 0){this.health = Math.min(this.health + dr*moveLifesteal, this.maxHealth);logConsole(`Hero healed for ${format(dr*moveLifesteal)}`);}
                     if (killingBlow) this.target = null;
                 }
                 break;
@@ -388,7 +415,7 @@ class Player extends CombatEntity {
             }
             if (ability.type == 1) {
                 let delta = dist - playerStats.engagementRange;
-                weights[index] = delta * this.moveIntention * (this.moveIntention > 0 ? ability.range[0]/100 : ability.range[1]);
+                weights[index] = delta * this.moveIntention * (this.moveIntention > 0 ? ability.range[0] / 100 : ability.range[1]);
             }
             if (ability.type == 2) {
                 if (ability.hasOwnProperty("effects")) {
@@ -450,7 +477,19 @@ class Player extends CombatEntity {
         if (this.nextMove != null) drawSkillIcon(context, this.nextMove.iconName, canvasX, canvasY);
     }
     rest() {
-        this.health = Math.min(this.health + this.maxHealth * this.data.restRate * logicTickTime / 1000, this.maxHealth);
+        let restRate = 0;
+        switch (gameState) {
+            case 'InRest':
+                restRate = this.data.restRate / 2;
+                break;
+            case 'InDead':
+                restRate = this.data.restRate;
+                break;
+            default:
+                console.error('UNRECOGNIZED GAME STATE FOR rest()');
+                break;
+        }
+        this.health = Math.min(this.health + this.maxHealth * restRate * logicTickTime / 1000, this.maxHealth);
     }
     takeDamage(amount) {
         let d = Math.max(0, amount * this.damageReduction - this.flatReduction);
@@ -692,9 +731,26 @@ var gameState = "InPatrol";
 var engagementRangeInput = document.getElementById("engagementDistanceInput");
 engagementRangeInput.addEventListener("keydown", e => e.preventDefault());
 engagementRangeInput.value = playerStats.engagementRange;
+var restPercentageInput = document.getElementById("restPercentageInput");
+restPercentageInput.addEventListener("keydown", e => e.preventDefault());
+restPercentageInput.value = playerStats.restToPercentage * 100;
+var expCount = 0;
+var expCountBuffer = 0;
+function updateExperienceEstimate(){
+    if(expCount == 0){
+        expCount = expCountBuffer;
+    }
+    expCount += (expCountBuffer-expCount)/10;
+    expCountBuffer = 0;
+    document.getElementById("expEstimateText").innerHTML = format(expCount*4);
+}
+window.setInterval(updateExperienceEstimate,15000);
 //window.setInterval(function () { mainLoop(); }, logicTickTime);
-function changeEngagementRange(){
-    playerStats.engagementRange =  Math.ceil(Number(engagementRangeInput.value)/5)*5;
+function changeEngagementRange() {
+    playerStats.engagementRange = Math.ceil(Number(engagementRangeInput.value) / 5) * 5;
+}
+function changeRestPercentage() {
+    playerStats.restToPercentage = Math.ceil(Number(restPercentageInput.value) / 5) * 5 * 0.01;
 }
 
 //const worker = new Worker('./worker.js');
@@ -724,6 +780,20 @@ function renderLoop() {
             }
             break;
         case "InRest":
+            drawBackground();
+            drawPlayer();
+            drawCharacterPortrait(ctxBuffer, player, 'l');
+            ctxBuffer.fillStyle = "black";
+            ctxBuffer.fillRect(0, cBuffer.height / 2 - 80, cBuffer.width, 140);
+            ctxBuffer.font = `80px Pickle Pushing`;
+            ctxBuffer.fillStyle = "white";
+            ctxBuffer.textAlign = 'center';
+            ctxBuffer.fillText("Resting...", cBuffer.width / 2, cBuffer.height / 2);
+            ctxBuffer.font = `24px Pickle Pushing`;
+            ctxBuffer.fillText("Just... give me a second...", cBuffer.width / 2, cBuffer.height / 2 + 50);
+            ctxBuffer.textAlign = 'left';
+            break;
+        case "InDead":
             ctxBuffer.fillStyle = "black";
             ctxBuffer.fillRect(0, 0, cBuffer.width, cBuffer.height);
             ctxBuffer.font = `80px Pickle Pushing`;
@@ -777,18 +847,18 @@ function renderLoop() {
     document.getElementById("trainingProgressBarOverview").max = currentTrainingArea.timeToComplete;
     document.getElementById("trainingProgressBarOverview").value = currentTrainingArea.progress;
     document.getElementById("classText").innerHTML = playerStats.class;
-    document.getElementById("passivePointsText").innerHTML = getTotalPassivePoints() - playerStats.passivePointsSpent;
+    document.getElementById("passivePointsText").innerHTML = getTotalPassivePoints() - getAvailablePassivePoints();
     document.getElementById("moneyText").innerHTML = format(playerStats.money);
     document.getElementById("reputationText").innerHTML = format(playerStats.reputation);
     Object.values(attribute).forEach(attributeName => {
         let baseAttributeValue = playerStats[attributeName];
         let effectiveValue = format(getEffectiveValue(attributeName))
         let softCappedValue = format(formulas.softcappedAttribute(attributeIdToIndex[attributeName]));
-        let softCap = playerStats.attributeSoftcaps[attributeIdToIndex[attributeName]];
+        let softCap = playerStats.attributeSoftcaps[attributeIdToIndex[attributeName]] + playerStats.permanentSoftcaps[attributeIdToIndex[attributeName]];
         let softCapText = (baseAttributeValue > softCap) ? `EFFECTIVE BASE: ${softCappedValue}` : `${softCappedValue}`;
         if (baseAttributeValue > softCap) {
             softCapText += `<br>(RAW: ${format(baseAttributeValue)})`
-            softCapText += `<br>[SOFTCAP: ${softCap}]`;
+            softCapText += `<br>[SOFTCAP: ${format(softCap)}]`;
             effectiveValue = effectiveValue + "(!)";
         }
         document.getElementById(attributeName + "Text").innerHTML = effectiveValue;
@@ -804,15 +874,20 @@ function logicLoop() {
                     break;
                 case 1:
                     logConsole("Encounter finished.")
-                    gameState = "InPatrol";
                     player.target = null;
                     player.nextMove = null;
                     currentArea.patrolCounter = 0;
-                    logConsole("Starting patrol.")
+                    if (player.health / player.maxHealth < playerStats.restToPercentage) {
+                        gameState = "InRest";
+                        logConsole("Resting...")
+                    } else {
+                        gameState = "InPatrol";
+                        logConsole("Starting patrol.")
+                    }
                     break;
                 case 2:
                     logConsole("Player defeated, resting.")
-                    gameState = "InRest";
+                    gameState = "InDead";
                     player = new Player(playerStats);
                     player.health = 0;
                     break;
@@ -821,6 +896,13 @@ function logicLoop() {
             }
             break;
         case "InRest":
+            player.rest();
+            if (player.health >= player.maxHealth * playerStats.restToPercentage) {
+                gameState = "InPatrol";
+                logConsole("Starting patrol.")
+            }
+            break;
+        case "InDead":
             player.rest();
             if (player.health == player.maxHealth) {
                 gameState = "InPatrol";
@@ -945,7 +1027,7 @@ function changeArea(index) {
     playerStats.currentArea = index;
     currentArea = areas[playerStats.currentArea];
     currentArea.patrolCounter = 0;
-    if (gameState != "InRest") {
+    if (gameState != "InDead") {
         gameState = "InPatrol";
     }
     player.target = null;
