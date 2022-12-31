@@ -1,4 +1,4 @@
-const version = '0.03d';
+const version = '0.04';
 var isOutdated = false;
 var lastVersion;
 document.getElementById('versionText').innerHTML ='v'+version;
@@ -20,7 +20,7 @@ const cleanPlayerStats = {
     permanentAttributes: [0,0,0,0],
     flatReduction: 0,
     healthRegeneration: 0,
-    cooldownReduction:0,
+    cooldownReduction:1,
     actionSpeed:1,
     powerMultiplier:1,
     criticalChance: 0,  
@@ -68,6 +68,7 @@ function load(file = null) {
         if (playerStats.class == 'Human') { playerStats.class = 'human' };
         if (localStorage.getItem("version") != version){lastVersion = localStorage.getItem("version"); isOutdated = true;}
         playerStats.experienceToNext = formulas.playerExp(playerStats.level);
+        playerStats.cooldownReduction = 1;
         if(isOutdated){playerStats.passivePointsSpent = Array(3).fill(0)}
     } else {
         console.log("No savefile found");
