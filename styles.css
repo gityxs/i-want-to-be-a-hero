@@ -691,6 +691,20 @@ progress[value]::-webkit-progress-bar {
     margin: 0 6px 0 6px;
     vertical-align: middle;
 }
+.reputationText {
+    color: rgb(33, 44, 172);
+}
+
+.reputationText:after {
+    content: "";
+    display: inline-block;
+    background: url("reputationTextIcon.png") no-repeat;
+    background-size: contain;
+    width: 32px;
+    height: 32px;
+    margin: 0 6px 0 6px;
+    vertical-align: middle;
+}
 
 #moneyText {
     color: rgb(44, 190, 0);
@@ -771,6 +785,25 @@ progress[value]::-webkit-progress-bar {
 
 #trainingUpgradeButton:active {
     border: 5px grey inset;
+}
+.fameUpgradeIcon {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border: .3vw grey outset;
+    position: relative;
+    padding: 0;
+    background-image: url('placeholder.png');
+    image-rendering: pixelated;
+    z-index: 1;
+    box-sizing: border-box;
+}
+.fameUpgradeButton {
+    width: 50%;
+    aspect-ratio: 2 / 1;
+    border: 2px solid black;
+    font-family: 'Pickle Pushing';
+    font-size: 1em;
+    background-color: whitesmoke;
 }
 
 .passiveSkillButton {

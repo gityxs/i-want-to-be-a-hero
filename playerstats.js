@@ -47,14 +47,20 @@ const cleanPlayerStats = {
     currentArea: 0,
     engagementRange: 5,
     restToPercentage: 1,
+    lastSaveTime: Date.now(),
+    fame: 0,
+    fameSpent:0,
+    fameUpgradeLevels: {},
+    fameEffects: {},
 }
 var playerStats = {};
+var justLoaded = false;
 reset();
-function save() {
+function save(imprt=false) {
     console.log("Saving data...")
-    playerStats.lastSave = Date.now();
+    if(!imprt)playerStats.lastSaveTime = Date.now();
     localStorage.setItem("heroSave", JSON.stringify(playerStats));
-    localStorage.setItem("heroLastSaved", playerStats.lastSave);
+    localStorage.setItem("heroLastSaved", Date.now());
     localStorage.setItem("version", version);
 }
 function load(file = null) {
@@ -62,6 +68,7 @@ function load(file = null) {
     let loadgame;
     if (file != null) { loadgame = file; } else { loadgame = JSON.parse(localStorage.getItem("heroSave")); }
     if (loadgame != null) {
+        justLoaded = true;
         Object.keys(loadgame).forEach(property => {
             playerStats[property] = loadgame[property];
         });
@@ -128,7 +135,10 @@ function playerSetLevel(value) {
     addPlayerExp(0);
 }
 function addPlayerExp(amount) {
-    playerStats.experience += amount;
+    let fameBonus = 1;
+    if(playerStats.fameEffects.hasOwnProperty('experienceGain'))
+    {fameBonus = 1+arraySum(Object.values(playerStats.fameEffects["experienceGain"]))};
+    playerStats.experience += fameBonus*amount;
     expCountBuffer += amount;
     if (playerStats.experience >= playerStats.experienceToNext) {
         playerStats.experience -= playerStats.experienceToNext;
@@ -138,12 +148,19 @@ function addPlayerExp(amount) {
         //checkAbilityRequirements();
     }
     checkLevelQuest();
+    return fameBonus*amount;
 }
 function addPlayerMoney(amount) {
-    playerStats.money += amount;
+    let fameBonus = 1;
+    if(playerStats.fameEffects.hasOwnProperty('experienceGain'))
+    { fameBonus = 1+arraySum(Object.values(playerStats.fameEffects["moneyGain"]));}
+    playerStats.money += fameBonus*amount;
+    return fameBonus*amount;
 }
 function addPlayerReputation(amount) {
+    
     playerStats.reputation += amount;
+    checkFame();
 }
 function loadGame(loadgame) {
     let shouldCheckVersion = false; //check if we need to implement a fix for version differences
@@ -184,7 +201,7 @@ function importGame() {
     let loadgame = JSON.parse(atob(text))
     if (loadgame && loadgame != null && loadgame != "") {
         load(loadgame);
-        save();
+        save(imprt=true);
         location.reload();
     }
     else {

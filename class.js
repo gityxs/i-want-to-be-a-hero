@@ -300,7 +300,7 @@ skillLibrary = {
                 type: 0, // attribute boost
                 effectTarget: "strength",
                 effectType: "additivePercent", //additiveFlat, additivePercent, multPercent
-                effectMagnitude: 0.02,
+                effectMagnitude: 0.005,
             }],
             maxLevel: 50,
             cost: Array(10).fill(1).concat(Array(10).fill(2), Array(10).fill(3), Array(10).fill(4), Array(10).fill(5)),
@@ -392,13 +392,13 @@ skillLibrary = {
                 type: 2, // training boost
                 effectTarget: "strengthTraining",
                 effectType: "additivePercent", //additiveFlat, additivePercent, multPercent
-                effectMagnitude: 0.1,
+                effectMagnitude: 0.02,
             },
             {
                 type: 2, // training boost
                 effectTarget: "toughnessTraining",
                 effectType: "additivePercent", //additiveFlat, additivePercent, multPercent
-                effectMagnitude: 0.1,
+                effectMagnitude: 0.02,
             }],
             maxLevel: 5,
             cost: [5, 10, 20, 40, 80],
@@ -415,13 +415,13 @@ skillLibrary = {
                 type: 0,
                 effectTarget: "strength",
                 effectType: "additivePercent", //additiveFlat, additivePercent, multPercent
-                effectMagnitude: 0.1,
+                effectMagnitude: 0.05,
             },
             {
                 type: 0,
                 effectTarget: "toughness",
                 effectType: "additivePercent", //additiveFlat, additivePercent, multPercent
-                effectMagnitude: 0.1,
+                effectMagnitude: 0.05,
             }],
             maxLevel: 5,
             requires: { 'sh_1_1': 1 },
@@ -484,13 +484,13 @@ skillLibrary = {
                 type: 2, // training boost
                 effectTarget: "strengthTraining",
                 effectType: "additivePercent", //additiveFlat, additivePercent, multPercent
-                effectMagnitude: 0.1,
+                effectMagnitude: 0.02,
             },
             {
                 type: 2, // training boost
                 effectTarget: "mindTraining",
                 effectType: "additivePercent", //additiveFlat, additivePercent, multPercent
-                effectMagnitude: 0.1,
+                effectMagnitude: 0.02,
             }],
             maxLevel: 5,
             cost: [5, 10, 20, 40, 80],
@@ -640,7 +640,7 @@ skillLibrary = {
             }],
             maxLevel: 3,
             cost: [5, 20, 80],
-            requires: { 'es_1_0': 1 },
+            requires: { 'es_1_0': 10 },
         },
         'es_1_3': {
             id: 'es_1_3',
@@ -657,7 +657,7 @@ skillLibrary = {
             }],
             maxLevel: 3,
             cost: [5, 20, 80],
-            requires: { 'es_1_0': 1 },
+            requires: { 'es_1_0': 10 },
         },
         'es_1_4': {
             id: 'es_1_4',
@@ -674,7 +674,7 @@ skillLibrary = {
             }],
             maxLevel: 3,
             cost: [5, 20, 80],
-            requires: { 'es_1_0': 1 },
+            requires: { 'es_1_0': 10 },
         },
         //#endregion
         //#region 2
@@ -726,11 +726,17 @@ skillLibrary = {
             effect: [{
                 type: 0, // attribute boost
                 effectTarget: "toughness",
+                effectType: "additiveFlat", //additiveFlat, additivePercent, multPercent
+                effectMagnitude: 1,
+            },
+            {
+                type: 2, // attribute boost
+                effectTarget: "toughnessTraining",
                 effectType: "additivePercent", //additiveFlat, additivePercent, multPercent
-                effectMagnitude: 0.02,
+                effectMagnitude: 0.01,
             }],
-            maxLevel: 50,
-            cost: Array(10).fill(1).concat(Array(10).fill(2), Array(10).fill(3), Array(10).fill(4), Array(10).fill(5)),
+            maxLevel: 10,
+            cost: Array(10).fill(1),
         },
         'mu_0_1': {
             id: 'mu_0_1',
@@ -840,7 +846,7 @@ skillLibrary = {
                 type: 0, // attribute boost
                 effectTarget: "toughness",
                 effectType: "additiveFlat", //additiveFlat, additivePercent, multPercent
-                effectMagnitude: 0.01,
+                effectMagnitude: 1,
             },
             {
                 type: 0, // attribute boost
@@ -849,7 +855,7 @@ skillLibrary = {
                 effectMagnitude: 1,
             }],
             maxLevel: 10,
-            cost: Array(10).fill(1).concat(Array(10).fill(2), Array(10).fill(3), Array(10).fill(4), Array(10).fill(5)),
+            cost: Array(10).fill(1),
         },
         'mu_2_1': {
             id: 'mu_2_1',
@@ -922,7 +928,7 @@ skillLibrary = {
                 type: 1, // attribute boost
                 effectTarget: "flatReductionHealth",
                 effectType: "additiveFlat", //additiveFlat, additivePercent, multPercent
-                effectMagnitude: 0.002,
+                effectMagnitude: 0.0015,
             }],
             maxLevel: 3,
             cost: [10, 100, 1000],
@@ -954,7 +960,7 @@ skillLibrary = {
             desc: 'Mixing animal DNA into yours to enhance your power.',
             effect: [{
                 type: 1, // attribute boost
-                effectTarget: "actionSpeed",
+                effectTarget: "damageMultiplier",
                 effectType: "additiveFlat", //additiveFlat, additivePercent, multPercent
                 effectMagnitude: 0.05,
             }],
@@ -1051,10 +1057,10 @@ skillLibrary = {
             iconName: 'shadowB',
             desc: 'You must learn to execute moves exactly every time.',
             effect: [{
-                type: 0, // secondary attribute boost
-                effectTarget: "agility",
-                effectType: "additiveFlat", //additiveFlat, additivePercent, multPercent
-                effectMagnitude: 1,
+                type: 2, // secondary attribute boost
+                effectTarget: "agilityTraining",
+                effectType: "additivePercent", //additiveFlat, additivePercent, multPercent
+                effectMagnitude: 0.01,
             },
             {
                 type: 0, // secondary attribute boost
@@ -1183,7 +1189,7 @@ skillLibrary = {
                 effectType: "multPercent", //additiveFlat, additivePercent, multPercent
                 effectMagnitude: 1.01,
             },],
-            maxLevel: 20,
+            maxLevel: 15,
             cost: Array(5).fill(5).concat(Array(5).fill(10),Array(5).fill(20)),
             requires: {'ni_2_2':12},
         },
@@ -1201,8 +1207,8 @@ skillLibrary = {
                 effectMagnitude: 1.04,
             },
             {
-                type: 0, // attribute boost
-                effectTarget: "agility",
+                type: 1, // attribute boost
+                effectTarget: "actionSpeed",
                 effectType: "multPercent", //additiveFlat, additivePercent, multPercent
                 effectMagnitude: 0.98,
             }],
@@ -1279,7 +1285,7 @@ playerMoves = {
         iconName: "smash",
         damage: 1,
         damageRatios: [2, .8, 0, 0],
-        damageRange: [1, 1.5],
+        damageRange: [1.1, 1.4],
         time: 7000,
         cooldownTime: 10000,
         range: [5, 5],
@@ -1331,7 +1337,7 @@ playerMoves = {
         iconName: "firecrackers",
         damage: 1,
         damageRatios: [0, 0, 1.2, .2],
-        damageRange: [0.5, 3],
+        damageRange: [1, 3],
         time: 3000,
         cooldownTime: 9000,
         range: [0, 30],
@@ -1648,6 +1654,27 @@ playerMoves = {
         time: 3000,
         cooldownTime: 5000,
         range: [5, 50],
+        cost: 5,
+    },
+    'groundStomp': {
+        class: 'superhuman',
+        type: 0,
+        sub: 1,
+        position: { row: 2, column: 5 },
+        category: 'melee',
+        name: "Ground Stomp",
+        description: "Slam your foot down causing a tremor around you that destabilizes nearby foes",
+        iconName: "placeholder",
+        damage: 0,
+        damageRatios: [1, 1, 0, 0],
+        damageRange: [1, 1],
+        effects: {
+            'stun': 2,
+            'aoe': 10,
+        },
+        time: 3000,
+        cooldownTime: 12000,
+        range: [5, 5],
         cost: 5,
     },
     'secondWind': {
@@ -2498,7 +2525,7 @@ function addEffect(skillId) {
 }
 function removeEffect(skillId) {
     let skill = skillLibrary[playerStats.class][skillId];
-    console.log("ID: ", skillId, "Skill:", skill);
+    //console.log("ID: ", skillId, "Skill:", skill);
     for (let index = 0; index < skill.effect.length; index++) {
         if (!playerStats.effectMultipliers.hasOwnProperty(skill.effect[index].effectTarget)) {
             playerStats.effectMultipliers[skill.effect.effectTarget] = { additiveFlat: {}, additivePercent: {}, multPercent: {}, };
