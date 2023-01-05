@@ -148,6 +148,20 @@ const storyQuests = [
     },
     {
         title: `A New Beginning V`,
+        text: `After beating up the Don you question him about his henchman and the crates in the warehouse. He tells you, 'You don't even know what's coming... if you find them they'll take care of you.. he.. he.. hugh' before exhaling the last breath. Inspecting some of the crates you recognize out that they're from one of the companies in the old abandoned industrial zone. You take some of the vials for yourself, destroying the rest, and decide to investigate the crate's origin in the industrial zone next.`,
+        requirementType: `defeat`,
+        requirementTarget: [`infusedthug`,`psychicthug`],
+        requirementAmount: [60,20],
+    },
+    {
+        title: `A New Beginning V`,
+        text: `It's now pretty clear that those vials are the same liquid as that from the lab, and that the Don had been smuggling it and using it within his mafia. But how did he get his hands on it? As you're making your way through a scrpyard pondering this, you hear a whistle in the air, and suddenly a shockwave impact from something falling launches a cloud of dust in into the air. As the dust dissipates you see what seems to be one of the Don's street thugs. He says nothing, but eyes you and grins`,
+        requirementType: `defeat`,
+        requirementTarget: [`superthug`],
+        requirementAmount: [1],
+    },
+    {
+        title: `Prologue.. For now`,
         text: `Ever since you defeated The Don, mafia activity around your area has simmered down, but the strange incidents around the city continue. One day while walking the streets you hear a woman running from the direction of the riverside, yelling, "A MONSTER! A MONSTER CAME OUT OF THE RIVER! HE'S KILLING EVERYONE!". This must be him. This time I won't lose.`,
         requirementType: `defeat`,
         requirementTarget: [`crabman`],
@@ -178,6 +192,10 @@ updateDiaryEntries();
 var areaSelect = document.getElementById("selectArea");
 checkAreaUnlocks();
 function checkTabUnlocks() {
+    if (playerStats.storyProgress >= 8) {
+        document.getElementById("fameBox").style.visibility = 'visible';
+        document.getElementById(`${tabNames[5]}TabButton`).setAttribute("class", "sidebarButton pickle");
+    }
     if (playerStats.storyProgress >= 19) {
         document.getElementById("prestigeBox").style.visibility = 'visible';
         document.getElementById(`${tabNames[6]}TabButton`).setAttribute("class", "sidebarButton pickle");

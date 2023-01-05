@@ -9,12 +9,19 @@ var ctxBuffer = cBuffer.getContext("2d");
 ctx.imageSmoothingEnabled = false;
 ctxBuffer.imageSmoothingEnabled = false;
 var leftWindow = document.getElementById("tabScrollWrapper");
-var tabNames = ['story', 'status', 'activity', 'areas', 'class','fame', 'prestige', 'info'];
+var tabNames = ['story', 'status', 'activity', 'areas', 'class', 'fame', 'prestige', 'info'];
 var sidebar = document.getElementById('sidebar');
+function updatePowerText(){
+    document.getElementById('heroPowerText').innerHTML = format(arraySum([
+        (Math.sqrt(getEffectiveValue("strength") + 1) - 1),(Math.sqrt(getEffectiveValue("toughness") + 1) - 1),
+        (Math.sqrt(getEffectiveValue("mind") + 1) - 1),(Math.sqrt(getEffectiveValue("agility") + 1) - 1)]));
+}
+updatePowerText();
+setInterval(updatePowerText,15000);
 let activeTab = 0;
 for (let index = 0; index < tabNames.length; index++) {
     const tabName = tabNames[index]
-    let b = document.createElement('button');
+    let b = document.createElement('div');
     b.setAttribute("class", "sidebarButton pickle");
     b.setAttribute("id", `${tabName}TabButton`);
     b.setAttribute("onclick", `changeTab(${index})`);
@@ -22,10 +29,135 @@ for (let index = 0; index < tabNames.length; index++) {
     sidebar.append(b);
 }
 changeTab(0);
-if (playerStats.storyProgress >= 18) { document.getElementById("prestigeBox").style.visibility = 'visible' } else { document.getElementById("prestigeBox").style.visibility = 'hidden' }
-if (playerStats.storyProgress >= 18) { document.getElementById(`${tabNames[6]}TabButton`).setAttribute("class", "sidebarButton pickle"); } else { document.getElementById(`${tabNames[6]}TabButton`).setAttribute("class", "sidebarButtonLocked pickle"); }
-if (playerStats.storyProgress >= 99) { document.getElementById("fameBox").style.visibility = 'visible' } else { document.getElementById("fameBox").style.visibility = 'hidden' }
-if (playerStats.storyProgress >= 99) { document.getElementById(`${tabNames[5]}TabButton`).setAttribute("class", "sidebarButton pickle"); } else { document.getElementById(`${tabNames[5]}TabButton`).setAttribute("class", "sidebarButtonLocked pickle"); }
+if (playerStats.storyProgress >= 19) { document.getElementById("prestigeBox").style.visibility = 'visible' } else { document.getElementById("prestigeBox").style.visibility = 'hidden' }
+if (playerStats.storyProgress >= 19) { document.getElementById(`${tabNames[6]}TabButton`).setAttribute("class", "sidebarButton pickle"); } else { document.getElementById(`${tabNames[6]}TabButton`).setAttribute("class", "sidebarButtonLocked pickle"); }
+if (playerStats.storyProgress >= 8) { document.getElementById("fameBox").style.visibility = 'visible' } else { document.getElementById("fameBox").style.visibility = 'hidden' }
+if (playerStats.storyProgress >= 8) { document.getElementById(`${tabNames[5]}TabButton`).setAttribute("class", "sidebarButton pickle"); } else { document.getElementById(`${tabNames[5]}TabButton`).setAttribute("class", "sidebarButtonLocked pickle"); }
+var windowInFocus = true;
+function checkTabFocused() {
+    if (document.visibilityState === 'visible') {
+        windowInFocus = true;
+    } else {
+        windowInFocus = false;
+    }
+}
+var masterTooltip = document.createElement("div");
+document.body.append(masterTooltip);
+masterTooltip.id = 'masterTooltip';
+masterTooltip.className = 'oxanium';
+function showMasterTooltip(e) {
+    let rect = e.target.getBoundingClientRect();
+    let horizontal;
+    let vertical;
+    //console.log("1) Tooltip height: ", masterTooltip.offsetHeight)
+    if (rect.right + 20 + masterTooltip.offsetWidth < window.innerWidth) {
+        horizontal = true;
+    } else {
+        horizontal = false;
+    }
+    if (rect.bottom + 20 + masterTooltip.offsetHeight > window.innerHeight) {
+        vertical = true;
+    } else {
+        vertical = false;
+    }
+    if (horizontal) {
+        masterTooltip.style.left = (rect.right + 20) + 'px';
+        masterTooltip.style.top = rect.top + 'px';
+    } else {
+        masterTooltip.style.left = (window.innerWidth - masterTooltip.offsetWidth - 20) + 'px';
+        masterTooltip.style.top = (rect.bottom + 20) + 'px';
+    }
+    if (vertical) {
+        masterTooltip.style.top = '';
+        masterTooltip.style.bottom = (window.innerHeight - rect.bottom) + 'px';
+    } else {
+        masterTooltip.style.bottom = '';
+    }
+
+
+    // if (rect.right + 20 + masterTooltip.offsetWidth < window.innerWidth) {
+    //     masterTooltip.style.left = (rect.right + 20) + 'px';
+    //     masterTooltip.style.top = rect.top + 'px';
+    // } else {
+    //     masterTooltip.style.left = (window.innerWidth - masterTooltip.offsetWidth - 20) + 'px';
+    //     masterTooltip.style.top = (rect.bottom + 20) + 'px';
+    // }
+    //console.log("2) Rect bottom: ", rect.bottom + 20, "Tooltip height: ", masterTooltip.offsetHeight)
+    //console.log("Screen height: ", window.innerHeight)
+    // if (rect.bottom + 20 + masterTooltip.offsetHeight > window.innerHeight) {
+    //     masterTooltip.style.top = '';
+    //     masterTooltip.style.bottom = (window.innerHeight - rect.bottom) + 'px';
+    // } else {
+    //     masterTooltip.style.bottom = '';
+    // }
+    masterTooltip.style.opacity = 1;
+}
+function generateAttributeTooltip(attributeId) {
+    let secondaryText = "";
+    switch (attributeId) {
+        case "strength":
+            secondaryText = `It also gives you a base damage reduction of ${format(100 * (1 - formulas.damageReduction(getEffectiveValue("strength"))))}%`
+            break;
+        case "toughness":
+            secondaryText = `It also gives you a maximum health of ${format(PLAYER_BASE_HEALTH + formulas.maxHealth(getEffectiveValue("toughness")))}`
+            break;
+        case "mind":
+            secondaryText = `It also modifies your base cooldowns to ${format(100 * formulas.cooldownReduction(getEffectiveValue("mind")))}%`
+            break;
+        case "agility":
+            secondaryText = `It also gives you a base action speed of ${format(100 * formulas.actionSpeed(getEffectiveValue("agility")))}%`
+            break;
+
+        default:
+            break;
+    }
+    return `Your ${attributeDisplayNames[attributeId]} base power is ${format(Math.sqrt(getEffectiveValue(attributeId) + 1) - 1)}<br>${secondaryText}`
+}
+document.addEventListener('mouseover', function (e) {
+    if (e.target.classList.contains('tooltip')) {
+        masterTooltip.innerHTML = e.target.getElementsByClassName("skilltooltiptext")[0].innerHTML;
+        showMasterTooltip(e);
+    }
+    if ('attributeTooltip' in e.target.dataset) {
+        masterTooltip.innerHTML = generateAttributeTooltip(e.target.dataset.attributeTooltip);
+        showMasterTooltip(e);
+    }
+    if ('abilityTooltip' in e.target.dataset) {
+        masterTooltip.innerHTML = generateAbilityRequirementTooltip(e.target.dataset.abilityTooltip);
+        let rect = e.target.getBoundingClientRect();
+        showMasterTooltip(e);
+    }
+    if ('resourceTooltip' in e.target.dataset) {
+        switch (e.target.dataset.resourceTooltip) {
+            case "money":
+                masterTooltip.innerHTML = "You earn money by defeating enemies.<br> It can be spent on higher level activities!";
+                break;
+            case "reputation":
+                masterTooltip.innerHTML = "You earn reputation by defeating enemies.<br> If you get enough of it you might earn some Fame!";
+                break;
+
+            default:
+                masterTooltip.innerHTML = "None";
+                break;
+        }
+        showMasterTooltip(e);
+
+    }
+});
+document.addEventListener('mouseout', function (e) {
+    if (e.relatedTarget == null) {
+        masterTooltip.style.opacity = 0;
+        return
+    }
+    if (e.relatedTarget.classList == undefined) {
+        masterTooltip.style.opacity = 0;
+    } else
+        if (!e.relatedTarget.classList.contains('tooltip')) {
+            masterTooltip.style.opacity = 0;
+        }
+});
+
+document.addEventListener('visibilitychange', checkTabFocused);
 function changeTab(index) {
     if (index < 0 || index >= tabNames.length) return;
     leftWindow.scrollTo({ left: index * leftWindow.clientWidth, behaviour: 'smooth', });
@@ -91,7 +223,16 @@ class CombatEntity {
         this.target = target;
     }
     takeDamage(amount) {
-        let d = amount * this.damageReduction;
+        let d = Math.max(0, amount * this.damageReduction); //- this.flatReduction);
+        if (this.shield > 0) {
+            if (d >= this.shield) {
+                d -= this.shield;
+                this.shield = 0;
+            } else {
+                this.shield -= d;
+                d = 0;
+            }
+        }
         this.health -= d;
         let died = (this.health <= 0);
         if (died) {
@@ -145,6 +286,7 @@ class Player extends CombatEntity {
     constructor(data) {
         super();
         this.data = data;
+        this.patrolSpeed = getFameEffect("patrolSpeed");
         this.name = "英雄";
         this.maxHealth = PLAYER_BASE_HEALTH + formulas.maxHealth(getEffectiveValue("toughness"));
         this.health = this.maxHealth;
@@ -523,6 +665,9 @@ class Enemy extends CombatEntity {
         });
         this.name = enemyData.name;
         this.drawIndex = drawIndex;
+        this.engagementRange = 5;
+        this.moveIntention = 1;
+        if (enemyData.hasOwnProperty("engagementRange")) this.engagementRange = enemyData.engagementRange;
         this.maxHealth = enemyData.maxHealth;
         this.health = this.maxHealth
         this.shield = 0;
@@ -609,13 +754,17 @@ class Enemy extends CombatEntity {
                                 case "takedown":
                                     break;
                                 case "knockback":
-                                    this.distance += this.nextMove.effects[effect];
+                                    encounter.enemyArray.forEach(enemy => {
+                                        if (enemy == null) return;
+                                        enemy.distance += this.nextMove.effects[effect];
+                                    });
+                                    environmentDistance += this.nextMove.effects[effect];
                                     break;
                                 case "pull":
                                     this.distance = Math.max(5, this.distance - this.nextMove.effects[effect]);
                                     break;
                                 case "aoe":
-                                    console.log("NOT IMPLEMENTED");
+                                    //console.log("NOT IMPLEMENTED");
                                     break;
 
                                 default:
@@ -627,8 +776,15 @@ class Enemy extends CombatEntity {
                 }
                 break;
             case 1:
-                this.distance -= Math.min(this.distance - 5, this.nextMove.range[0]);
-                //logConsole(`${this.name} used ${this.nextMove.name}`)
+                let deltaMinus = Math.min(this.engagementRange - this.distance, this.nextMove.range[1]);
+                let deltaPlus = Math.min(Math.abs(this.distance - this.engagementRange), this.nextMove.range[0]);
+                if (this.moveIntention > 0) {
+                    this.distance -= deltaPlus;
+                } else {
+                    this.distance += deltaMinus;
+                }
+
+                if (!['Move', 'Wait'].includes(this.nextMove.name)) logConsole(`${this.name} used ${this.nextMove.name}!`);
                 break;
             case 2:
                 if (this.nextMove.hasOwnProperty("effects")) {
@@ -639,11 +795,21 @@ class Enemy extends CombatEntity {
                                 amount = this.nextMove.baseDamage / 100 * this.maxHealth;
                                 if (this.nextMove.effects.hasOwnProperty("hope")) { amount *= (1 + (1 - this.health / this.maxHealth) * this.nextMove.effects.hope); }
                                 this.health = Math.min(this.health + amount, this.maxHealth);
-                                logConsole(`${this.name} healed for ${format(amount)}`);
+                                logConsole(`${this.name} healed for ${format(amount)} from ${this.nextMove.name}`);
                                 break;
                             case "shield":
                                 amount = this.nextMove.baseDamage / 100 * this.maxHealth;
                                 if (amount > this.shield) this.shield = amount;
+                                break;
+                            case "allyshield":
+                                amount =
+                                    this.nextMove.damageRatios[0] * (Math.pow(this.data.attributes[0] + 1, HEALTH_GROWTH_EXPONENT) - 1)
+                                    + this.nextMove.damageRatios[1] * (Math.pow(this.data.attributes[1] + 1, HEALTH_GROWTH_EXPONENT) - 1)
+                                    + this.nextMove.damageRatios[2] * (Math.pow(this.data.attributes[2] + 1, HEALTH_GROWTH_EXPONENT) - 1)
+                                    + this.nextMove.damageRatios[3] * (Math.pow(this.data.attributes[3] + 1, HEALTH_GROWTH_EXPONENT) - 1);
+                                if ((player.target != null) && (player.target != this))
+                                    if (amount > player.target.shield) player.target.shield = amount;
+                                logConsole(`${this.name} used ${this.nextMove.name} on ${player.target.name}`);
                                 break;
                             default:
                                 break;
@@ -672,8 +838,11 @@ class Enemy extends CombatEntity {
             document.getElementById("enemyMoveText").innerHTML = "No target";
             return;
         }
+        if (this.distance > this.engagementRange) { this.moveIntention = 1; }
+        else if (this.distance < this.engagementRange) { this.moveIntention = -1; }
+        else { this.moveIntention = 0; }
         let dist = this.distance;
-        let weights = [];
+        let weights = Array(this.data.moves.length).fill(0);
         for (let index = 0; index < this.data.moves.length; index++) {
             let k = this.data.moves[index];
             let ability = abilityLibrary[k];
@@ -692,19 +861,31 @@ class Enemy extends CombatEntity {
                 }
             }
             if (ability.type == 1) {
-                weights[index] = (dist <= 5 ? 0 : ability.range[0] / dist);
+                let delta = this.distance - this.engagementRange;
+                weights[index] = delta * this.moveIntention * (this.moveIntention > 0 ? ability.range[0] / 100 : ability.range[1]);
             }
             if (ability.type == 2) {
                 if (ability.hasOwnProperty("effects")) {
+                    let amount;
                     if (ability.effects.hasOwnProperty('heal')) {
-                        let amount = ability.baseDamage/100*this.maxHealth;
+                        amount = ability.baseDamage / 100 * this.maxHealth;
                         if (this.maxHealth - this.health > amount) {
                             weights[index] = 100;
                         }
                     }
                     if (ability.effects.hasOwnProperty('shield')) {
-                        let amount = ability.baseDamage/100*this.maxHealth;
-                        if (this.shield <= 0.2*amount) {
+                        amount = ability.baseDamage / 100 * this.maxHealth;
+                        if (this.shield <= 0.2 * amount) {
+                            weights[index] = 100;
+                        }
+                    }
+                    if (ability.effects.hasOwnProperty('allyshield')) {
+                        amount =
+                            ability.damageRatios[0] * (Math.pow(this.data.attributes[0] + 1, HEALTH_GROWTH_EXPONENT) - 1)
+                            + ability.damageRatios[1] * (Math.pow(this.data.attributes[1] + 1, HEALTH_GROWTH_EXPONENT) - 1)
+                            + ability.damageRatios[2] * (Math.pow(this.data.attributes[2] + 1, HEALTH_GROWTH_EXPONENT) - 1)
+                            + ability.damageRatios[3] * (Math.pow(this.data.attributes[3] + 1, HEALTH_GROWTH_EXPONENT) - 1);
+                        if ((player.target.shield <= 0.2 * amount) && (player.target != this)) {
                             weights[index] = 100;
                         }
                     }
@@ -713,18 +894,22 @@ class Enemy extends CombatEntity {
         }
         const max = Math.max(...weights);
         const indexes = [];
-        for (let index = 0; index < weights.length; index++) {
-            if (weights[index] === max) {
-                indexes.push(index);
+        let moveKey;
+        if (max > 0) {
+            for (let index = 0; index < weights.length; index++) {
+                if (weights[index] === max) {
+                    indexes.push(index);
+                }
             }
+            let pick;
+            if (indexes.length == 1) {
+                pick = 0;
+            } else {
+                pick = Math.floor(Math.random() * indexes.length);
+            }
+            moveKey = this.data.moves[indexes[pick]];
         }
-        let pick;
-        if (indexes.length == 1) {
-            pick = 0;
-        } else {
-            pick = Math.floor(Math.random() * indexes.length);
-        }
-        let moveKey = this.data.moves[indexes[pick]];
+
         if (moveKey == undefined) { moveKey = 'wait'; }
         this.nextMoveKey = moveKey;
         this.nextMove = abilityLibrary[this.nextMoveKey];
@@ -737,6 +922,19 @@ class Enemy extends CombatEntity {
         context.drawImage(this.image, canvasX - this.image.width * 2, canvasY - this.image.height * 4, this.image.width * 4, this.image.height * 4);
         drawInfoBars(context, this, canvasX, canvasY);
         if (this.nextMove != null) drawSkillIcon(context, this.nextMove.iconName, canvasX, canvasY);
+        if (player.target == this) {
+            let offset = 6 * Math.sin(Date.now() / 150);
+            context.lineWidth = 7;
+            context.strokeStyle = 'black';
+            context.beginPath();
+            context.moveTo(canvasX - 13, canvasY - 173 - offset);
+            context.lineTo(canvasX, canvasY - 160 - offset);
+            context.lineTo(canvasX + 13, canvasY - 173 - offset);
+            context.stroke();
+            context.lineWidth = 4;
+            context.strokeStyle = 'yellow';
+            context.stroke();
+        }
     }
     onDeath() {
         let exp = addPlayerExp(this.data.expReward);
@@ -758,8 +956,11 @@ class Encounter {
             //let picked = Math.floor(Math.random() * this.area.enemies.length);
             let picked = this.enemiesToSpawn[index];
             let drawIndex = mod(index, 2) == 0 ? Math.floor(index / 2) : -Math.floor(index + 1 / 2);
-            //let newEnemy = new Enemy(enemyData[this.area.enemies[picked]], Math.round(5 * Math.random()) * 10 + 50, drawIndex = drawIndex);
-            let newEnemy = new Enemy(enemyData[picked], Math.round(5 * Math.random()) * 10 + 50, drawIndex = drawIndex);
+            let spawnDistance = 50;
+            if (enemyData[picked].hasOwnProperty("spawnDistance")) {
+                spawnDistance = enemyData[picked].spawnDistance;
+            }
+            let newEnemy = new Enemy(enemyData[picked], Math.round(2 * (Math.random() - 0.5)) * 5 + spawnDistance, drawIndex = drawIndex);
             this.enemyArray.push(newEnemy);
             this.enemyArray[index].setTarget(player);
         }
@@ -824,7 +1025,18 @@ function updateExperienceEstimate() {
     expCountBuffer = 0;
     document.getElementById("expEstimateText").innerHTML = format(expCount * 4);
 }
+var moneyCount = 0;
+var moneyCountBuffer = 0;
+function updateMoneyEstimate() {
+    if (moneyCount == 0) {
+        moneyCount = moneyCountBuffer;
+    }
+    moneyCount += (moneyCountBuffer - moneyCount) / 10;
+    moneyCountBuffer = 0;
+    document.getElementById("moneyEstimateText").innerHTML = format(moneyCount * 4);
+}
 window.setInterval(updateExperienceEstimate, 15000);
+window.setInterval(updateMoneyEstimate, 15000);
 //window.setInterval(function () { mainLoop(); }, logicTickTime);
 function changeEngagementRange() {
     playerStats.engagementRange = Math.ceil(Number(engagementRangeInput.value) / 5) * 5;
@@ -848,6 +1060,7 @@ function mainLoop() {
 
 }
 function renderLoop() {
+    if (!windowInFocus) return;
     ctxBuffer.clearRect(0, 0, cBuffer.width, cBuffer.height);
     switch (gameState) {
         case "InCombat":
@@ -1028,25 +1241,42 @@ function drawCharacterPortrait(context, character, side) {
     let mirror = 1;
     if (side == "r") { anchor.x = context.canvas.width - portraitDimensions - 2 * portraitBorder; anchor.y = 0; mirror = -1; }
     //Portrait Image
-    context.fillStyle = "black";
-    context.fillRect(anchor.x, anchor.y, portraitDimensions + 2 * portraitBorder, portraitDimensions + 2 * portraitBorder);
-    context.drawImage(character.portraitImage, anchor.x + portraitBorder, anchor.y + portraitBorder, portraitDimensions, portraitDimensions);
+    // if(side == 'l'){
+    // context.fillStyle = "black";
+    // context.fillRect(anchor.x, anchor.y, portraitDimensions + 2 * portraitBorder, portraitDimensions + 2 * portraitBorder);
+    // context.drawImage(character.portraitImage, anchor.x + portraitBorder, anchor.y + portraitBorder, portraitDimensions, portraitDimensions);
+    // }
     //Healthbar
-    let hanchor = { x: portraitDimensions + 2 * portraitBorder, y: 0 };
-    if (side == "r") { hanchor.x = context.canvas.width - portraitDimensions - 2 * portraitBorder; }
+    let hanchor = { x: 0, y: 0 };
+    if (side == "r") { hanchor.x = context.canvas.width;}
     //Name
+    if(side == 'l'){context.textAlign = 'center'} else {context.textAlign = 'center'}
     let nameHeight = 30;
     context.fillStyle = "rgba(0,0,0,.5)";
-    context.fillRect(hanchor.x, anchor.y, mirror * 200, nameHeight + 12);
+    context.fillRect(hanchor.x, anchor.y,mirror * 370, nameHeight + 12);
     context.font = `${nameHeight}px Pickle Pushing`;
     context.fillStyle = "white";
-    context.fillText(character.name, hanchor.x + (mirror - 1) * 98, hanchor.y + nameHeight);
+    context.fillText(character.name, hanchor.x + (mirror) * (360/2), hanchor.y + nameHeight);
     hanchor.y += nameHeight + 12;
-    //Health bar
+    //MAIN BAR BACKGROUND SETUP
+    let barHeight = 32;
+    let barLength = 370;
+
+    let barBorder = 4;
     context.fillStyle = "grey";
-    context.fillRect(hanchor.x, hanchor.y, mirror * 200, 16);
+    context.beginPath();
+    context.moveTo(hanchor.x,hanchor.y);
+    context.lineTo(hanchor.x + mirror * barLength,hanchor.y);
+    context.lineTo(hanchor.x + mirror * (barLength-barHeight),hanchor.y + barHeight);
+    context.lineTo(hanchor.x,hanchor.y + barHeight);
+    context.fill();
     context.fillStyle = "rgb(200, 35, 35)";
-    context.fillRect(hanchor.x + 2 * mirror, hanchor.y + 2, mirror * 196, 12);
+    context.beginPath();
+    context.moveTo(hanchor.x + mirror*barBorder,hanchor.y + barBorder);
+    context.lineTo(hanchor.x + mirror * (barLength - 2*barBorder),hanchor.y + barBorder);
+    context.lineTo(hanchor.x + mirror * (barLength-barHeight),hanchor.y + barHeight - barBorder);
+    context.lineTo(hanchor.x + mirror*barBorder,hanchor.y + barHeight - barBorder);
+    context.fill();
     let grdHealth = context.createLinearGradient(hanchor.x + mirror * 2, 0, hanchor.x + mirror * (196), 0);
     grdHealth.addColorStop(0, "rgb(21, 153, 41)");
     grdHealth.addColorStop(1, "rgb(0, 255, 38)");
@@ -1065,29 +1295,82 @@ function drawCharacterPortrait(context, character, side) {
         healthPct = character.health / character.maxHealth;
         shieldPct = character.shield / character.maxHealth;
     }
-    context.fillStyle = grdHealth;
-    context.fillRect(hanchor.x + 2 * mirror, hanchor.y + 2, mirror * 196 * Math.max(0, healthPct), 12);
+    //SHIELD
     context.fillStyle = grdShield;
-    context.fillRect(hanchor.x + (2 + 196 * Math.max(0, healthPct)) * mirror, hanchor.y + 2, mirror * 196 * Math.max(0, shieldPct), 12);
+    context.beginPath();
+    context.moveTo(hanchor.x + mirror * barBorder,hanchor.y + barBorder);
+    context.lineTo(hanchor.x + mirror * ((barLength-2*barBorder)*(healthPct+shieldPct) ),hanchor.y + barBorder);
+    context.lineTo(hanchor.x + mirror * (barLength*(healthPct+shieldPct)-barHeight*(healthPct+shieldPct)),hanchor.y + barHeight - barBorder);
+    context.lineTo(hanchor.x + mirror*barBorder,hanchor.y + barHeight - barBorder);
+    context.fill();
+    //HEALTH
+    context.fillStyle = grdHealth;
+    context.beginPath();
+    context.moveTo(hanchor.x + mirror*barBorder,hanchor.y + barBorder);
+    context.lineTo(hanchor.x + mirror * ((barLength- 2*barBorder)*healthPct ),hanchor.y + barBorder);
+    context.lineTo(hanchor.x + mirror * (barLength*healthPct-barHeight*(healthPct)),hanchor.y + barHeight - barBorder);
+    context.lineTo(hanchor.x + mirror*barBorder,hanchor.y + barHeight - barBorder);
+    context.fill();
+    //SHADING
     context.fillStyle = grdShading;
-    context.fillRect(hanchor.x + 2 * mirror, hanchor.y + 2, mirror * 196 * Math.max(0, healthPct + shieldPct), 12);
-    hanchor.y += 12;
+    context.beginPath();
+    context.moveTo(hanchor.x + mirror * barBorder,hanchor.y + barBorder);
+    context.lineTo(hanchor.x + mirror * ((barLength-2*barBorder)*(healthPct+shieldPct) ),hanchor.y + barBorder);
+    context.lineTo(hanchor.x + mirror * (barLength*(healthPct+shieldPct)-barHeight*(healthPct+shieldPct)),hanchor.y + barHeight - barBorder);
+    context.lineTo(hanchor.x + mirror*barBorder,hanchor.y + barHeight - barBorder);
+    context.fill();
+    context.font = `italic bold 18px Oxanium`;
+    context.fillStyle = "black";
+    context.textAlign = (side =="l")?"left": "right";
+    context.textBaseline = "middle";
+    context.fillText(`${format(100*(character.health+character.shield)/character.maxHealth)}%`, hanchor.x + mirror*barBorder*2, hanchor.y+barHeight/2+barBorder/2);
+    hanchor.y += barHeight-barBorder;
     //Action bar
+    barLength -= 2*barHeight;
+    barBorder = 4;
+    barHeight = 30;
     context.fillStyle = "grey";
-    context.fillRect(hanchor.x, hanchor.y, mirror * 200, 10);
-    context.fillStyle = "white";
-    context.fillRect(hanchor.x + mirror * 2, hanchor.y + 2, mirror * 196, 6);
+    context.beginPath();
+    context.moveTo(hanchor.x,hanchor.y);
+    context.lineTo(hanchor.x + mirror * barLength,hanchor.y);
+    context.lineTo(hanchor.x + mirror * (barLength-barHeight),hanchor.y + barHeight);
+    context.lineTo(hanchor.x,hanchor.y + barHeight);
+    context.fill();
+    context.fillStyle = "rgb(220,220,220)";
+    context.beginPath();
+    context.moveTo(hanchor.x + mirror*barBorder,hanchor.y + barBorder);
+    context.lineTo(hanchor.x + mirror * (barLength - 2*barBorder),hanchor.y + barBorder);
+    context.lineTo(hanchor.x + mirror * (barLength-barHeight),hanchor.y + barHeight - barBorder);
+    context.lineTo(hanchor.x + mirror*barBorder,hanchor.y + barHeight - barBorder);
+    context.fill();
     if (character.initiative == NaN) console.log("NaN error");
+    let initiativePct = (character.initiative / character.nextMoveInitiative);
     let grdAction = context.createLinearGradient(hanchor.x, 0, hanchor.x + mirror * 196 * (character.initiative / (character.nextMove != null) ? character.nextMoveInitiative : character.initiative), 0);
     grdAction.addColorStop(0.5, "rgb(0,255,255)");
     grdAction.addColorStop(1, "rgb(0,110,220)");
     context.fillStyle = grdAction;
-    context.fillRect(hanchor.x + mirror * 2, hanchor.y + 2, mirror * 196 * (character.initiative / character.nextMoveInitiative), 6);
+    context.beginPath();
+    context.moveTo(hanchor.x + mirror*barBorder,hanchor.y + barBorder);
+    context.lineTo(hanchor.x + mirror * ((barLength- 2*barBorder)*initiativePct ),hanchor.y + barBorder);
+    context.lineTo(hanchor.x + mirror * (barLength*initiativePct-barHeight*(initiativePct)),hanchor.y + barHeight - barBorder);
+    context.lineTo(hanchor.x + mirror*barBorder,hanchor.y + barHeight - barBorder);
+    context.fill();
     let grdAction2 = context.createLinearGradient(0, hanchor.y + 2, 0, hanchor.y + 8);
     grdAction2.addColorStop(0, "rgba(255, 255, 255, .25)");
     grdAction2.addColorStop(1, "rgba(0, 0, 0, .25)");
     context.fillStyle = grdAction2;
-    context.fillRect(hanchor.x + mirror * 4, hanchor.y + 2, mirror * 192 * (character.initiative / character.nextMoveInitiative), 6);
+    context.beginPath();
+    context.moveTo(hanchor.x + mirror*barBorder,hanchor.y + barBorder);
+    context.lineTo(hanchor.x + mirror * ((barLength- 2*barBorder)*initiativePct ),hanchor.y + barBorder);
+    context.lineTo(hanchor.x + mirror * (barLength*initiativePct-barHeight*(initiativePct)),hanchor.y + barHeight - barBorder);
+    context.lineTo(hanchor.x + mirror*barBorder,hanchor.y + barHeight - barBorder);
+    context.fill();
+    context.font = `16px Pickle Pushing`;
+    context.fillStyle = "black";
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    if(character.nextMove != null) context.fillText(character.nextMove.name, hanchor.x + mirror * (barLength/2+barBorder - barHeight/2), hanchor.y+barHeight/2+barBorder/2);
+    context.textBaseline = "alphabetic";
     //hanchor.y += 8;
     //EXP bar   
     // if (side == "l") {
@@ -1108,7 +1391,7 @@ function changeArea(index) {
     currentArea = areas[playerStats.currentArea];
     currentArea.patrolCounter = 0;
     if (gameState != "InDead") {
-        gameState = "InPatrol";
+        gameState = "InRest";
     }
     player.target = null;
     player.nextMove = null;

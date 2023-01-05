@@ -1,4 +1,4 @@
-const version = '0.04';
+const version = '0.04a';
 var isOutdated = false;
 var lastVersion;
 document.getElementById('versionText').innerHTML ='v'+version;
@@ -138,7 +138,8 @@ function addPlayerExp(amount) {
     let fameBonus = 1;
     if(playerStats.fameEffects.hasOwnProperty('experienceGain'))
     {fameBonus = 1+arraySum(Object.values(playerStats.fameEffects["experienceGain"]))};
-    playerStats.experience += fameBonus*amount;
+    amount *= fameBonus;
+    playerStats.experience += amount;
     expCountBuffer += amount;
     if (playerStats.experience >= playerStats.experienceToNext) {
         playerStats.experience -= playerStats.experienceToNext;
@@ -148,14 +149,16 @@ function addPlayerExp(amount) {
         //checkAbilityRequirements();
     }
     checkLevelQuest();
-    return fameBonus*amount;
+    return amount;
 }
 function addPlayerMoney(amount) {
     let fameBonus = 1;
-    if(playerStats.fameEffects.hasOwnProperty('experienceGain'))
+    if(playerStats.fameEffects.hasOwnProperty('moneyGain'))
     { fameBonus = 1+arraySum(Object.values(playerStats.fameEffects["moneyGain"]));}
-    playerStats.money += fameBonus*amount;
-    return fameBonus*amount;
+    amount *= fameBonus;
+    playerStats.money += amount;
+    moneyCountBuffer += amount;
+    return amount;
 }
 function addPlayerReputation(amount) {
     

@@ -351,7 +351,7 @@ skillLibrary = {
                 type: 1, // attribute boost
                 effectTarget: "damageMultiplier",
                 effectType: "multPercent", //additiveFlat, additivePercent, multPercent
-                effectMagnitude: 0.05,
+                effectMagnitude: 1.05,
             }],
             maxLevel: 3,
             cost: [20,30,40],
@@ -401,7 +401,7 @@ skillLibrary = {
                 effectMagnitude: 0.02,
             }],
             maxLevel: 5,
-            cost: [5, 10, 20, 40, 80],
+            cost: Array(5).fill(2),
             requires: { 'sh_1_0': 10 },
         },
         'sh_1_2': {
@@ -493,7 +493,7 @@ skillLibrary = {
                 effectMagnitude: 0.02,
             }],
             maxLevel: 5,
-            cost: [5, 10, 20, 40, 80],
+            cost: Array(5).fill(2),
             requires: { 'sh_2_0': 10 }
         },
         'sh_2_2': {
@@ -940,7 +940,7 @@ skillLibrary = {
             position: { row: 2, column: 4 },
             name: 'Bestial Speed',
             iconName: 'milerun',
-            desc: 'Mixing animal DNA into yours you enhance your speed.',
+            desc: 'Mixing animal DNA into yours enhances your speed.',
             effect: [{
                 type: 1, // attribute boost
                 effectTarget: "actionSpeed",
@@ -2010,6 +2010,7 @@ function RebuildSlots() {
 
         let slot = document.createElement("select");
         slot.setAttribute("class", "abilitySlot pickle");
+        slot.setAttribute("data-ability-tooltip", "1");
         slots.push(slot);
         slot.setAttribute("onchange", `changeAbilitySlot(${index})`);
         loadoutContainer.appendChild(slot);
@@ -2206,7 +2207,8 @@ function populateAbilitySlots() {
             element.appendChild(option);
             if (currentAbilities[slotN] == ability) {
                 option.setAttribute("selected", "selected");
-                element.style.backgroundImage = "url(" + playerMoves[ability].iconName + "Icon.png)"
+                element.style.backgroundImage = "url(" + playerMoves[ability].iconName + "Icon.png)";
+                element.dataset.abilityTooltip = ability;
             };
         });
     }
@@ -2232,6 +2234,7 @@ function changeAbilitySlot(slotN, internal = false) {
         if (!allow) { slot.value = playerStats.equippedAbilities[slotN + 1]; return; }
         slot.style.backgroundImage = "none";
         playerStats.equippedAbilities[slotN + 1] = null;
+        slot.dataset.abilityTooltip = "";
     } else {
         for (let i = 0; i < slots.length; i++) {
             if (i == slotN) continue;
@@ -2242,6 +2245,7 @@ function changeAbilitySlot(slotN, internal = false) {
             }
         }
         slot.style.backgroundImage = "url(" + playerMoves[newAbility].iconName + "Icon.png)";
+        slot.dataset.abilityTooltip = newAbility;
         playerStats.equippedAbilities[slotN + 1] = newAbility;
     }
 }
@@ -2329,6 +2333,7 @@ function generatePassiveTooltip(skill) {
         + requirementsText;
 }
 function generateAbilityRequirementTooltip(ability) {
+    if(!playerMoves.hasOwnProperty(ability)) return "None";
     const abilityData = playerMoves[ability];
     let stringDisplay = "";
     stringDisplay += abilityData.name + " ";

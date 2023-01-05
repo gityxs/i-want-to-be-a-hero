@@ -24,7 +24,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.cdnfonts.com/css/pickle-pushing" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 
     <title>I Want To Be A Hero</title>
@@ -80,7 +80,28 @@
     <main>
 
         <section id="sidebar" class="blockPanel"></section>
-        <section id="canvasLogWrap">
+        <section id="rightColumnWrap">
+            <div id="heroCardPanel" class="dotted blockPanel">
+                <div class="subHeader pickle">Hero card</div>
+                <div id="heroCardGrid" class="">
+                    <img src="joePortrait.png" style="height: 10vh; aspect-ratio: 1/1;image-rendering: pixelated;">
+                    <div id="heroCardStats">
+                        <div class="pickle" style="font-size: auto;margin: 1vmin;" data-resource-tooltip="">
+                            Power: <span class="heroPowerText" style="font-size: auto;pointer-events: none;"
+                                id="heroPowerText">0</span></div>
+                        <div class="pickle" style="font-size: auto;margin: 1vmin;" data-resource-tooltip="money">
+                            Money: <span class="moneyText" style="font-size: auto;pointer-events: none;"
+                                id="moneyText">0</span></div>
+                        <div></div>
+                        <div class="pickle" style="font-size: auto  ;margin: 1vmin;" data-resource-tooltip="reputation">
+                            Reputation: <span style="font-size: auto;pointer-events: none;" class="reputationText"
+                                id="reputationText">0</span>
+                        </div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
             <div id="canvasWrap">
                 <canvas id="myCanvas"></canvas>
             </div>
@@ -119,7 +140,13 @@
                             <span id="playerInitiativeText" class="barText pickle">0</span>
                             <progress id="playerInitiativeBar" value="100" max="1000"></progress>
                         </div>
-                        <div id="expEstimate" class="pickle">Experience/min: <span id="expEstimateText"></span></div>
+                        <div id="resourceEstimates" style="display: grid; grid-template-columns: 50% 50%;">
+                            <div id="expEstimate" class="pickle">Experience/min: <span id="expEstimateText">0</span>
+                            </div>
+                            <div id="moneyEstimate" class="pickle">Money/min: <span id="moneyEstimateText">0</span>
+                            </div>
+                        </div>
+
                         <div class="statDisplay pickle blockPanel" id="nextMove">Next move: <span
                                 id="playerMoveText">0</span></div>
                         <div class="pickle blockPanel">
@@ -132,28 +159,23 @@
                                 onchange="changeRestPercentage()" id="restPercentageInput" name="quantity" min="0"
                                 max="100" step="5">%
                         </div>
-                        <div class="pickle subHeader">Resources:</div>
-                        <div id="resourceGrid"
-                            style="display: grid; grid-template-columns: 1fr 1fr;grid-template-rows: 1fr;">
-                            <div class="pickle" style="font-size: 2.5vmin;margin: 1vmin;"> Money: <span
-                                    class="moneyText" style="font-size: 2.5vmin;" id="moneyText">0</span></div>
-                            <div class="pickle" style="font-size: 2.5vmin;margin: 1vmin;"> Reputation: <span
-                                    style="font-size: 2.5vmin;" class="reputationText" id="reputationText">0</span>
-                            </div>
-                        </div>
+                        <br>
                         <div class="pickle subHeader">Attributes:</div>
                         <div id="statsGrid">
                             <div class="statDisplay pickle">
-                                STR: <span class="strengthText" id="strengthText">0</span>
+                                STR: <span class="strengthText" id="strengthText"
+                                    data-attribute-tooltip="strength">0</span>
                             </div>
                             <div class="statDisplay pickle">
-                                TGH: <span class="toughnessText" id="toughnessText">0</span>
+                                TGH: <span class="toughnessText" id="toughnessText"
+                                    data-attribute-tooltip="toughness">0</span>
                             </div>
                             <div class="statDisplay pickle">
-                                MND: <span class="mindText" id="mindText">0</span>
+                                MND: <span class="mindText" id="mindText" data-attribute-tooltip="mind">0</span>
                             </div>
                             <div class="statDisplay pickle">
-                                AGI: <span class="agilityText" id="agilityText">0</span>
+                                AGI: <span class="agilityText" id="agilityText"
+                                    data-attribute-tooltip="agility">0</span>
                             </div>
                         </div>
                         <div class="pickle subHeader">Active abilities:</div>
@@ -177,8 +199,7 @@
                     <div class="blockHeader pickle">ACTIVITIES</div>
                     <div id="trainingAreaDisplay" class="blockBody dotted">
                         <div class="subHeader pickle">Base attributes from training</div>
-                        <div id="statsGrid"
-                            style="display: grid; grid-template-columns: 1fr 1fr;grid-template-rows: 1fr 1fr; gap:1em; margin:1em;  ">
+                        <div id="statsGrid" style="display: grid;">
                             <div id="strengthStatText" class="statDisplay pickle">
                                 Strength: <span class="strengthText" id="strengthSoftcapText">0</span>
                             </div>
@@ -239,12 +260,18 @@
                 </section>
                 <section class="infoBox" id="fameBox">
                     <div class="blockHeader pickle" style="display: block">FAME</div>
-                    <div class="blockBody dotted pickle verticalScroll">
-                        <div class="pickle">Fame: <span id="famePointText"></span></div>
-                        <div class="pickle">Next at: <span id="fameToNextText"></span><span class="reputationText"></span></div>
-                        <div id = "fameUpgradeContainer" class="blockPanel"></div>
-                        <button style="display:block; margin:auto" class="bannerButton"
-                            onclick="">Test</button>
+                    <div class="blockBody dotted pickle">
+                        <div style="height: 22vh;">
+                            <div class="oxanium">As your reputation starts to spread, you gain fame points. Fame points
+                                can be allocated to give various passive bonuses.<br>
+                                You can reset your point allocation by Rebranding (requires double click). WARNING! This
+                                costs 5% of your current reputation! </div>
+                            <br><button ondblclick="resetFameUpgrades()" class="bannerButton">Rebrand</button><br>
+                            <div class="pickle">Fame: <span id="famePointText"></span></div>
+                            <div class="pickle">Next at: <span id="fameToNextText"></span><span
+                                    class="reputationText"></span></div>
+                        </div>
+                        <div id="fameUpgradeContainer" class="blockPanel verticalScroll" style="height: 70vh;"></div>
                     </div>
                 </section>
                 <section class="infoBox" id="prestigeBox">
@@ -281,7 +308,7 @@
                         fills the prepared ability is used.
                         You can also set which abilities to use once you unlock more by clicking on the slots on the
                         status tab.
-                        Finding criminals takes some time (patrolling, affected by agility) after which you'll enter an
+                        Finding criminals takes some time (patrolling time) after which you'll enter an
                         encounter.
                         If you are defeated in combat you'll take some downtime to recover (10 seconds).
                         <div class="subHeader">Movement</div>
@@ -296,7 +323,7 @@
                         <br \><span class="pickle strengthText">STR</span>increases your damage reduction.
                         <br \><span class="pickle toughnessText">TGH</span>increases your maximum health.
                         <br \><span class="pickle mindText">MND</span>reduces your ability cooldowns.
-                        <br \><span class="pickle agilityText">AGI</span>increases your action speed (affects patrol).
+                        <br \><span class="pickle agilityText">AGI</span>increases your action speed.
                         <br \>
                         <br \>Attributes can be increased by training.
                         <div class="subHeader">Training</div>
