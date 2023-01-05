@@ -336,7 +336,7 @@ var cnItems = {
     "Hero card": "英雄卡",
     "Haymaker": "重拳",
     "Cost: MAX!": "成本: 最大!",
-    "": "",
+    "Neighbourhood Suburbs": "邻近郊区",
     "": "",
     "": "",
     "": "",

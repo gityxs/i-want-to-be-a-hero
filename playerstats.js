@@ -193,13 +193,13 @@ function loadGame(loadgame) {
 function exportGame() {
     save()
     navigator.clipboard.writeText(btoa(JSON.stringify(playerStats))).then(function () {
-        alert("Copied to clipboard!")
+        alert("已复制到剪贴板！")
     }, function () {
-        alert("Error copying to clipboard, try again...")
+        alert("复制到剪贴板时出错，请重试...")
     });
 }
 function importGame() {
-    let text = prompt("Input your save here:");
+    let text = prompt("粘贴你的存档:");
     if(text == null) return;
     let loadgame = JSON.parse(atob(text))
     if (loadgame && loadgame != null && loadgame != "") {
@@ -208,7 +208,7 @@ function importGame() {
         location.reload();
     }
     else {
-        alert("Invalid input.")
+        alert("输入的内容无效.")
     }
 }
 function reset() {
@@ -220,9 +220,9 @@ function resetSave() {
     location.reload();
 }
 function hardReset() {
-    let confirmation1 = confirm('WARNGING!\nThis will completely reset your save file!');
+    let confirmation1 = confirm('警告！\这将完全重置您的游戏进度！');
     if (confirmation1) {
-        let confirmation2 = confirm('Are you really sure?');
+        let confirmation2 = confirm('你真的确定吗?');
         if (confirmation2) { resetSave(); } else { return; }
     } else {
         return;
