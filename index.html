@@ -68,9 +68,9 @@
                         <div class="pickle" style="font-size: auto;margin: 1vmin;" data-resource-tooltip="">
                             Power: <span class="heroPowerText" style="font-size: auto;pointer-events: none;"
                                 id="heroPowerText">0</span></div>
-                        <div class="pickle" style="font-size: auto;margin: 1vmin;" data-resource-tooltip="money">
-                            Money: <span class="moneyText" style="font-size: auto;pointer-events: none;"
-                                id="moneyText">0</span></div>
+                        <div class="pickle moneyText" style="font-size: auto;margin: 1vmin;" data-resource-tooltip="money">
+                            Money: <span style="font-size: auto;pointer-events: none;"
+                                id="moneyText">0</span><span id="moneyEstimateText">0</span>/min</div>
                         <div></div>
                         <div class="pickle" style="font-size: auto  ;margin: 1vmin;" data-resource-tooltip="reputation">
                             Reputation: <span style="font-size: auto;pointer-events: none;" class="reputationText"
@@ -122,8 +122,8 @@
                         <div id="resourceEstimates" style="display: grid; grid-template-columns: 50% 50%;">
                             <div id="expEstimate" class="pickle">Experience/min: <span id="expEstimateText">0</span>
                             </div>
-                            <div id="moneyEstimate" class="pickle">Money/min: <span id="moneyEstimateText">0</span>
-                            </div>
+                            <!-- <div id="moneyEstimate" class="pickle">Money/min: <span id="moneyEstimateText">0</span>
+                            </div> -->
                         </div>
 
                         <div class="statDisplay pickle blockPanel" id="nextMove">Next move: <span
@@ -365,6 +365,7 @@
                             Upload Custom Hero Portrait!
                         </label>
                         <input style="display: none;" type="file" id="customPortraitInput" accept="image/jpeg, image/png, image/jpg">
+                        <button id="resetPortraitButton" class="bannerButton"> Reset Portrait</button>
                         
 
                         <audio controls muted id="audioSource" style="display: none;">
