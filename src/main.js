@@ -366,9 +366,9 @@ function renderLoop() {
             ctxBuffer.font = `80px Pickle Pushing`;
             ctxBuffer.fillStyle = "white";
             ctxBuffer.textAlign = 'center';
-            ctxBuffer.fillText("Resting...", cBuffer.width / 2, cBuffer.height / 2);
+            ctxBuffer.fillText("休息中...", cBuffer.width / 2, cBuffer.height / 2);
             ctxBuffer.font = `24px Pickle Pushing`;
-            ctxBuffer.fillText("Just... give me a second...", cBuffer.width / 2, cBuffer.height / 2 + 50);
+            ctxBuffer.fillText("只是... 给我几秒钟...", cBuffer.width / 2, cBuffer.height / 2 + 50);
             ctxBuffer.textAlign = 'left';
             break;
         case "InDead":
@@ -377,9 +377,9 @@ function renderLoop() {
             ctxBuffer.font = `80px Pickle Pushing`;
             ctxBuffer.fillStyle = "white";
             ctxBuffer.textAlign = 'center';
-            ctxBuffer.fillText("DEFEAT!", cBuffer.width / 2, cBuffer.height / 2);
+            ctxBuffer.fillText("被击败!", cBuffer.width / 2, cBuffer.height / 2);
             ctxBuffer.font = `24px Pickle Pushing`;
-            ctxBuffer.fillText("Getting up and trying again...", cBuffer.width / 2, cBuffer.height / 2 + 50);
+            ctxBuffer.fillText("爬起来再试一次...", cBuffer.width / 2, cBuffer.height / 2 + 50);
             ctxBuffer.textAlign = 'left';
             break;
         case "InPatrol":
@@ -393,7 +393,7 @@ function renderLoop() {
             ctxBuffer.fillStyle = "white";
             ctxBuffer.textAlign = 'center';
 
-            ctxBuffer.fillText((currentArea.patrolTime - currentArea.patrolCounter > 500) ? "Patrolling..." : "FIGHT!", cBuffer.width / 2, cBuffer.height / 2 + 30);
+            ctxBuffer.fillText((currentArea.patrolTime - currentArea.patrolCounter > 500) ? "巡逻..." : "战斗!", cBuffer.width / 2, cBuffer.height / 2 + 30);
             ctxBuffer.textAlign = 'left';
             break;
         default:
@@ -542,7 +542,7 @@ function drawCharacterPortrait(context, character, side) {
     context.fillRect(hanchor.x, anchor.y, mirror * 370, nameHeight + 12);
     context.font = `${nameHeight}px Pickle Pushing`;
     context.fillStyle = "white";
-    context.fillText(character.name, hanchor.x + (mirror) * (360 / 2), hanchor.y + nameHeight);
+    context.fillText(cnItem(character.name), hanchor.x + (mirror) * (360 / 2), hanchor.y + nameHeight);
     hanchor.y += nameHeight + 12;
     //MAIN BAR BACKGROUND SETUP
     let barHeight = 32;
@@ -655,7 +655,7 @@ function drawCharacterPortrait(context, character, side) {
     context.fillStyle = "black";
     context.textAlign = "center";
     context.textBaseline = "middle";
-    if (character.nextMove != null) context.fillText(character.nextMove.name, hanchor.x + mirror * (barLength / 2 + barBorder - barHeight / 2), hanchor.y + barHeight / 2 + barBorder / 2);
+    if (character.nextMove != null) context.fillText(cnItem(character.nextMove.name), hanchor.x + mirror * (barLength / 2 + barBorder - barHeight / 2), hanchor.y + barHeight / 2 + barBorder / 2);
     context.textBaseline = "alphabetic";
     //hanchor.y += 8;
     //EXP bar   
