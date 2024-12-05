@@ -1,30 +1,41 @@
-const version = '0.05b1';
+const version = '0.07';
 var isOutdated = false;
 var lastVersion;
+var debug = false;
+if (location.hostname === "localhost" || location.hostname === "127.0.0.1" || location.hostname === "") {
+    debug = true;
+}
 document.getElementById('versionText').innerHTML = 'v' + version;
 const cleanPlayerStats = {
+    version: version,
     experience: 0,
     experienceToNext: baseExperienceCost,
     money: 0,
     reputation: 0,
     class: "human",
+    classPrestige: 0,
+    subclassPrestige: Array(3).fill(0),
     level: 0,
     passivePointsSpent: Array(3).fill(0),
-    strength: 0,
-    toughness: 0,
-    mind: 0,
-    agility: 0,
-    attributeSoftcaps: [100, 100, 100, 100],
+    strength: 1,
+    toughness: 1,
+    mind: 1,
+    agility: 1,
+    decayedAttributes: [0,0,0,0],
+    attributeSoftcaps: [500, 500, 500, 500],
     attributeTrainingModifier: [1, 1, 1, 1],
     permanentSoftcaps: [0, 0, 0, 0],
     permanentAttributes: [0, 0, 0, 0],
     flatReduction: 0,
     damageTaken: 1,
+    damageDealt: 1,
+    maxHP: 1,
     healthRegeneration: 0,
     cooldownReduction: 1,
     actionSpeed: 1,
     powerMultiplier: 1,
     criticalChance: 0,
+    lifesteal:0,
     overwhelm: 0,
     takedown: 0,
     dodgeChance: 0,
@@ -53,6 +64,10 @@ const cleanPlayerStats = {
     fameSpent: 0,
     fameUpgradeLevels: {},
     fameEffects: {},
+    lastFreeActivity: "activity_0_0",
+    areaCompletions: {},
+    activityAutomation: {},
+    activityAutomationLevels: {},
 }
 var playerStats = {};
 var justLoaded = false;
@@ -60,6 +75,8 @@ reset();
 function save(imprt = false) {
     console.log("Saving data...")
     if (!imprt) playerStats.lastSaveTime = Date.now();
+
+    playerStats.version = version;
     localStorage.setItem("heroSave", JSON.stringify(playerStats));
     localStorage.setItem("heroLastSaved", Date.now());
     localStorage.setItem("version", version);
@@ -74,9 +91,24 @@ function load(file = null) {
             playerStats[property] = loadgame[property];
         });
         if (playerStats.class == 'Human') { playerStats.class = 'human' };
-        if (localStorage.getItem("version") != null) {
-            if (localStorage.getItem("version") != version) { lastVersion = localStorage.getItem("version"); isOutdated = true;playerStats.effectMultipliers = {}; }
-            if (Number(localStorage.getItem("version").substring(3, 4)) < 4) { resetSave(); }
+        if (playerStats.version != null) {
+            if (!loadgame.hasOwnProperty("version")) { playerStats.currentArea = 0; }
+            if (playerStats.version != version) {
+                lastVersion = playerStats.version;
+                isOutdated = true; console.log("outdated save");
+
+                if (playerStats.class == 'human') {playerStats.attributeSoftcaps = [1e3, 1e3, 1e3, 1e3];
+                if(playerStats.storyProgress > 10) playerStats.storyProgress = 10;}
+            }
+            if (Number(playerStats.version.substring(3, 4)) < 4) { resetSave(); }
+            if (Number(playerStats.version.substring(3, 4)) < 6) { playerStats.currentArea = 0; playerStats.level = convertOldLevel(playerStats.level); }
+            if (Number(playerStats.version.substring(3, 4)) < 7) {
+                console.log(playerStats.version.substring(4, 5));
+                if (['', 'a', 'b','c'].includes(playerStats.version.substring(4, 5))) {
+                    playerStats.level = convertOldLevel(playerStats.level);
+                    if (playerStats.class == 'human') { playerStats.attributeSoftcaps = [500, 500, 500, 500]; }
+                }
+            }
         }
         const imageData = localStorage.getItem("heroPortraitImageData");
         if (imageData != null) { document.getElementById("heroPortraitImage").src = imageData };
@@ -89,8 +121,10 @@ function load(file = null) {
 load();
 setInterval(save, 30000);
 function getTotalPassivePoints() {
-    let decades = Math.floor(playerStats.level / 10);
-    return ((decades + 1) / 2 * decades * 10) + (playerStats.level - decades * 10) * (decades + 1);
+    // let decades = Math.floor(playerStats.level / 10);
+    // return ((decades + 1) / 2 * decades * 10) + (playerStats.level - decades * 10) * (decades + 1)
+    //     + classPrestigeBonus[playerStats.classPrestige].bonusPassives;
+    return playerStats.level + classPrestigeBonus[playerStats.classPrestige].bonusPassives;
 }
 function getAvailablePassivePoints() {
     return arraySum(playerStats.passivePointsSpent);
@@ -121,9 +155,18 @@ function getSecondaryAttribute(property) {
         * (1 + arraySum(Object.values(playerStats.effectMultipliers[property].additivePercent)))
         * arrayMult(Object.values(playerStats.effectMultipliers[property].multPercent));
 }
+function getDecayBonus(attributeIndex){
+    if(playerStats.class == 'human') return 1;
+    const limitBonus = Math.exp(0.05*Math.log10(Math.max(1,playerStats.decayedAttributes[attributeIndex])))
+    const undercapMult = Math.max(1, 10 - 10*playerStats[attributeIndexToId[attributeIndex]]/
+    (playerStats.attributeSoftcaps[attributeIndex] + playerStats.permanentSoftcaps[attributeIndex]));
+    return undercapMult*(limitBonus - 1) + 1;
+}
+
 function getTrainingModifier(attributeName) {
     let baseValue = playerStats.attributeTrainingModifier[attributeIdToIndex[attributeName]];
     let property = attributeName + "Training";
+    baseValue *= classPrestigeBonus[playerStats.classPrestige].attributeGain;
     if (!playerStats.effectMultipliers.hasOwnProperty(property)) { return baseValue; }
     return (baseValue
         + arraySum(Object.values(playerStats.effectMultipliers[property].additiveFlat)))
@@ -139,18 +182,22 @@ function playerSetLevel(value) {
     playerStats.experience = playerStats.experienceToNext + 1;
     addPlayerExp(0);
 }
+function setMoney(value) {
+    playerStats.money = Math.max(0, value);
+}
 function addPlayerExp(amount) {
     let fameBonus = 1;
     if (playerStats.fameEffects.hasOwnProperty('experienceGain')) { fameBonus = 1 + arraySum(Object.values(playerStats.fameEffects["experienceGain"])) };
     amount *= fameBonus;
+    if(classPrestigeBonus) amount *= classPrestigeBonus[playerStats.classPrestige].expGain;
     playerStats.experience += amount;
     expCountBuffer += amount;
-    if (playerStats.experience >= playerStats.experienceToNext) {
+    while (playerStats.experience >= playerStats.experienceToNext) {
         playerStats.experience -= playerStats.experienceToNext;
         playerStats.level += 1;
-        playerStats.experienceToNext = (baseExperienceCost + baseLinearExperienceCost * playerStats.level) * Math.pow(baseExperienceCostExponent, playerStats.level);
+        // playerStats.experienceToNext = (baseExperienceCost + baseLinearExperienceCost * playerStats.level) * Math.pow(baseExperienceCostExponent, playerStats.level);
         playerStats.experienceToNext = formulas.playerExp(playerStats.level);
-        //checkAbilityRequirements();
+        gameEvents.levelup.trigger();
     }
     checkLevelQuest();
     return amount;

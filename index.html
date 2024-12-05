@@ -3,23 +3,23 @@
 
 <head>
     <!-- Google tag (gtag.js) -->
-    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-R33JEXMNXN"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R33JEXMNXN"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
 
         gtag('config', 'G-R33JEXMNXN');
-    </script> -->
+    </script>
     <!-- Google tag (gtag.js) -->
-    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-R33JEXMNXN"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R33JEXMNXN"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
 
         gtag('config', 'G-R33JEXMNXN');
-    </script> -->
+    </script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,14 +28,12 @@
     <link rel="stylesheet" href="styles.css">
 
     <title>I Want To Be A Hero</title>
-    <link rel="icon" type="image/x-icon" href="favicon.png">
+    <link rel="icon" type="image/x-icon" href="resources/misc/favicon.png">
 </head>
 
 
 
 <body>
-    <script src="chs.js"></script>
-    <script src="core.js"></script>
     <div id="splashScreen" class="splashScreen">
         <div class="pickle splashTitle splashFadeIn">I WANT TO BE A HERO</div>
     </div>
@@ -63,14 +61,16 @@
             <div id="heroCardPanel" class="dotted blockPanel">
                 <div class="subHeader pickle">Hero card</div>
                 <div id="heroCardGrid" class="">
-                    <img id="heroPortraitImage" src="joePortrait.png" style="height: 10vh; aspect-ratio: 1/1;image-rendering: pixelated;">
+                    <img id="heroPortraitImage" src="resources/misc/joePortrait.png"
+                        style="height: 10vh; aspect-ratio: 1/1;image-rendering: pixelated;">
                     <div id="heroCardStats">
                         <div class="pickle" style="font-size: auto;margin: 1vmin;" data-resource-tooltip="">
                             Power: <span class="heroPowerText" style="font-size: auto;pointer-events: none;"
                                 id="heroPowerText">0</span></div>
-                        <div class="pickle moneyText" style="font-size: auto;margin: 1vmin;" data-resource-tooltip="money">
-                            Money: <span style="font-size: auto;pointer-events: none;"
-                                id="moneyText">0</span><span id="moneyEstimateText">0</span>/min</div>
+                        <div class="pickle moneyText" style="font-size: auto;margin: 1vmin;"
+                            data-resource-tooltip="money">
+                            Money: <span style="font-size: auto;pointer-events: none;" id="moneyText">0</span><span
+                                id="moneyEstimateText">0</span>/min</div>
                         <div></div>
                         <div class="pickle" style="font-size: auto  ;margin: 1vmin;" data-resource-tooltip="reputation">
                             Reputation: <span style="font-size: auto;pointer-events: none;" class="reputationText"
@@ -180,16 +180,16 @@
                         <div class="subHeader pickle">Base attributes from training</div>
                         <div id="statsGrid" style="display: grid;">
                             <div id="strengthStatText" class="statDisplay pickle">
-                                Strength: <span class="strengthText" id="strengthSoftcapText">0</span>
+                                STR: <span class="strengthText" id="strengthSoftcapText">0</span>
                             </div>
                             <div id="toughhnessStatText" class="statDisplay pickle">
-                                Toughness: <span class="toughnessText" id="toughnessSoftcapText">0</span>
+                                TGH: <span class="toughnessText" id="toughnessSoftcapText">0</span>
                             </div>
                             <div id="mindStatText" class="statDisplay pickle">
-                                Mind: <span class="mindText" id="mindSoftcapText">0</span>
+                                MND: <span class="mindText" id="mindSoftcapText">0</span>
                             </div>
                             <div id="agilityStatText" class="statDisplay pickle">
-                                Agility: <span class="agilityText" id="agilitySoftcapText">0</span>
+                                AGI: <span class="agilityText" id="agilitySoftcapText">0</span>
                             </div>
                         </div>
                         <div id="trainingAreaName" class="statDisplay pickle"
@@ -199,7 +199,7 @@
                                 value="100" max="1000"></progress>
                         </div>
                         <div id="activityGrid" class="blockPanel" style="display:grid;grid-template-columns: 49.5% 49.5%;grid-auto-rows: min-content;
-                        height: 50%;gap:1%;overflow-y: scroll;overflow-x:hidden;">
+                        height: 75%;gap:1%;overflow-y: scroll;overflow-x:hidden;">
 
                         </div>
 
@@ -208,10 +208,7 @@
                 </section>
                 <section class="infoBox" id="areasBox">
                     <div class="blockHeader pickle">AREAS</div>
-                    <div id="selectArea" class="blockBody dotted verticalScroll" style="box-sizing: border-box; padding: 10px; text-align:justify; display: block;
-                font-family: 'Pickle Pushing', sans-serif;
-                font-size: 24px;
-                font-weight:lighter ;">
+                    <div id="selectArea" class="blockBody dotted verticalScroll">
                     </div>
 
                 </section>
@@ -236,7 +233,7 @@
                             <div class="oxanium">As your reputation starts to spread, you gain fame points. Fame points
                                 can be allocated to give various passive bonuses.<br>
                                 You can reset your point allocation by Rebranding (requires double click). WARNING! This
-                                costs 5% of your current reputation! </div>
+                                costs 1% of your current reputation! </div>
                             <br><button ondblclick="resetFameUpgrades()" class="bannerButton">Rebrand</button><br>
                             <div class="pickle">Fame: <span id="famePointText"></span></div>
                             <div class="pickle">Next at: <span id="fameToNextText"></span><span
@@ -247,23 +244,87 @@
                 </section>
                 <section class="infoBox" id="prestigeBox">
                     <div class="blockHeader pickle" style="display: block">PRESTIGE</div>
-                    <div class="blockBody dotted pickle verticalScroll">
-                        <div style="line-height:1.5;" class="oxanium"> You can take the Y you found to unlock more of
-                            your power.<br>
-                            This will reset your attributes.<br>
-                            Your attribute softcaps will increase by 10% of their current value plus 50% of the
-                            effective value over the current softcap.<br>
-                            Softcaps will only increase for attributes which have reached their current softcap!<br>
-                            You gain 1% of the softcap as permanent attributes when you reset this way. (They cannot be
-                            lowered below that value by activities)<br>
 
-                        </div>
-                        <div class="subHeader">Softcaps</div>
-                        <div id="attributePrestigeText" style="text-align: center;padding:3%">
+                    <div class="blockBody dotted pickle">
+                        <div style="display:grid;height:100%;grid-template-rows: 5% 95%;overflow:hidden;">
+                            <div id="prestigeTabHeader"
+                                style="display:grid;grid-auto-columns: 1fr;grid-auto-flow: column;">
+                                <div class="bannerButton prestigePanelTab" onclick="changePrestigeTab(0)">Attribute
+                                </div>
+                                <div class="bannerButton prestigePanelTab" onclick="changePrestigeTab(1)">Class</div>
+                            </div>
+                            <div id="attributePrestigePanel">
+                                <div class="subHeader">Overtraining</div>
+                                <div class="oxanium">Going over your limits is hard, and every second you don't spend
+                                    training you lose some of your power over the limit.
+                                    For every attribute point you lose this way, you gain a permanent bonus. This bonus
+                                    is stronger the less attributes you have, reaching a minimum when you reach your
+                                    limit.
+                                </div>
+                                <div id="attributeDecayText" class="oxanium" style="text-align: center;padding:3%">
 
+                                </div>
+                                <div class="subHeader">LIMITS</div>
+                                <div id="attributePrestigeText" style="text-align: center;padding:3%">
+
+                                </div>
+                                <button style="display:block; margin:auto" class="bannerButton"
+                                    onclick="attributePrestige()">Take Y</button>
+                                <br>
+                                <div style="line-height:1.5;" class="oxanium"> You can take the Y you found to unlock
+                                    more of your power.<br><br>
+                                    This will reset your attributes.<br><br>
+                                    Your limit will increase to their current value above the limit (limit cannot
+                                    decrease).<br><br>
+                                    You gain 1% of the limit as permanent attributes when you reset this way. (They
+                                    cannot be lowered below that value by activities)<br><br>
+
+                                </div>
+                            </div>
+                            <div id="classPrestigePanel">
+                                <div style="line-height:1.5;" class="oxanium">
+                                    Prestige your class to gain even more power to become the most
+                                    powerful hero<br>
+                                    <div class="subHeader pickle">Requirements:</div>
+                                    <div class="blockPanel">
+                                        Level: <span class="cpLevelRequirement">0</span><br>
+                                        Story Progress: <span class="cpStoryRequirement">0</span><br>
+                                        Total softcap: <span class="cpSoftcapRequirement">0</span><br>
+                                    </div>
+                                    Your class prestige bonus will become:<br>
+                                    <div class="blockPanel">
+                                        Attribute Gain: <span class="cpReward1">0</span><br>
+                                        Manual Training: <span class="cpReward2">0</span><br>
+                                        Bonus Passive Points: <span class="cpReward3">0</span><br>
+                                        Activity EXP: <span class="cpReward4">0</span><br>
+                                        EXP Gain: <span class="cpReward4">0</span><br>
+                                    </div>
+                                    <br>
+                                    You will take some time away from fighting crime to dig deeper into what your powers can do.
+                                    You lose all your levels when you class prestige, keeping limits (forces an
+                                    attribute prestige)
+                                    <br>
+                                    <br>
+                                    Prestiging will also unlock more passives and abilities in each subclass:
+                                    <br>
+                                </div>
+
+                                <div id="classPrestigePick" style="display:flex; gap: 10%; justify-content: center;">
+                                    <div class="bannerButton subclassPickButton"></div>
+                                    <div class="bannerButton subclassPickButton"></div>
+                                    <div class="bannerButton subclassPickButton"></div>
+                                </div>
+                                <div class="subHeader">Preview</div>
+                                <div id="subclassPreviewGrid" class="blockPanel" style="height:13%;display: grid; grid-template-columns: repeat(5,1fr);
+                                grid-auto-rows: 1fr; gap:5%;    align-items: center;justify-items: center;">
+
+                                </div>
+                                <br>
+                                <br>
+                                <button style="display:block; margin:auto" class="bannerButton"
+                                    onclick="classPrestige()">I WANT TO BE THE STRONGEST HERO!</button>
+                            </div>
                         </div>
-                        <button style="display:block; margin:auto" class="bannerButton"
-                            onclick="attributePrestige()">Take Y</button>
                     </div>
                 </section>
                 <section class="infoBox" id="helpBox">
@@ -271,7 +332,7 @@
                     <div class="blockBody dotted pickle verticalScroll  " id="helpBody" style="overflow-y:scroll">
                         <div style="text-transform: uppercase; font-size: 2.5vw;">Join the <a
                                 href="https://discord.gg/HzVyvdQnkW" target=”_blank”>DISCORD</a><img
-                                src="discordIcon.svg" style="
+                                src="resources/misc/discordIcon.svg" style="
                             margin-bottom: -0.6vw; height: 3vw;"><br></div>
                         <div class="subHeader">Combat</div>
                         Your hero automatically uses his abilities in combat. Combat is action gauge based, once it
@@ -316,7 +377,7 @@
                         that
                         percentage of the respective attribute value is used in the move's damage formula.
                         <br \>The damage formula is:
-                        <br \><img id="damageFormula" src="./damageFormulaInvert.png" />,
+                        <br \><img id="damageFormula" src="resources/misc/damageFormulaInvert.png" />,
                         where the second part is evaluated and then summed from every contributing attribute.
                         <br \>
                         <br \> The damage ratio of abilities can be found by hovering them on the "Abilities" tab.
@@ -331,6 +392,8 @@
                         <br \>Shield: gives temporary health points. Lost at the end of an encounter. Does not stack,
                         stronger shields overwrite.
                         <br \>
+                        <br \>AoE: also hits other targets in that range.
+                        <br \>
                         <br \>Critical strike: chance to deal 50% more damage.
                         <br \>
                         <br \>Health regeneration: health regeneration per second in combat.
@@ -338,12 +401,17 @@
                         <br \>Overwhelm: increases damage based on enemy current hp (higher hp = more damage).
                         <br \>
                         <br \>Takedown: increases damage based on enemy current hp (lower hp = more damage).
+                        <br \>
+                        <br \>Rush: moves along with attacking.
+                        <br \>
+                        <br \>Repeat: Chance to use again without cooldown. Successive repeats half the chance.
                     </div>
                 </section>
                 <section class="infoBox" id="optionsBox">
                     <div class="blockHeader pickle" style="display: block">OPTIONS</div>
                     <div class="blockBody dotted pickle verticalScroll">
-                        <span class="pickle" id="versionText" style="display: block; text-align: right;">v0.02 Alpha</span>
+                        <span class="pickle" id="versionText" style="display: block; text-align: right;">v0.02
+                            Alpha</span>
                         <h1 class="title pickle" style="display: block; font-size: 2em;">
                             I WANT TO BE A HERO
                         </h1>
@@ -351,25 +419,55 @@
                         <br>
                         <button class="bannerButton" onclick="toggleMusic()">Toggle Music</button>
                         <input type="range" min="1" max="100" value="20" class="slider" id="volumeSlider"
-                        onchange="setVolume(this.value)">
+                            onchange="setVolume(this.value)">
                         <br>
                         <br>
-                        <button class="bannerButton" onclick="save()">Save Game</button>
+                        <button class="bannerButton" onclick="(function(){save();logConsole('Saved!')})()">Save
+                            Game</button>
                         <button class="bannerButton" onclick="exportGame()">Export</button>
                         <button class="bannerButton" onclick="importGame()">Import</button>
-                        
+
                         <button class="bannerButton" onclick="hardReset()">HARD RESET</button>
                         <br>
                         <br>
                         <label for="customPortraitInput" class="bannerButton" style="padding: 2px;">
                             Upload Custom Hero Portrait!
                         </label>
-                        <input style="display: none;" type="file" id="customPortraitInput" accept="image/jpeg, image/png, image/jpg">
+                        <input style="display: none;" type="file" id="customPortraitInput"
+                            accept="image/jpeg, image/png, image/jpg">
                         <button id="resetPortraitButton" class="bannerButton"> Reset Portrait</button>
-                        
+                        <br>
+                        <br>
+                        <button id="resetAutoButton" class="bannerButton" onclick="resetAutoUpgrades()"> Reset
+                            Automation Upgrades</button>
+                        <br>
+                        <br>
+                        <button id="resetAreaButton" class="bannerButton"
+                            onclick="(function(){console.log('test');currentArea = areas[0];changeArea(0);})()"> Reset
+                            Area</button>
+                        <br>
+                        <br>
+                        <!-- <div id="classTestButtons">
+                            <button class="bannerButton" onclick="changeClass('superhuman',true)"> Superhuman</button>
+                            <button class="bannerButton" onclick="changeClass('mutant',true)"> Mutant</button>
+                            <button class="bannerButton" onclick="changeClass('esper',true)"> Esper</button>
+                            <button class="bannerButton" onclick="changeClass('ninja',true)"> Ninja</button>
+                            <button class="bannerButton" onclick="playerSetLevel(playerStats.level+10)">Add 10 levels</button>
+                            <button class="bannerButton" onclick="addPlayerReputation(1e6)">Add rep</button>
+                            <button class="bannerButton" onclick="playerStats.reputation = 0;addPlayerReputation(0)">Reset rep</button>
+                            <button class="bannerButton" onclick="
+                            classPrestigeBonus[0].attributeGain = 100;classPrestigeBonus[1].attributeGain = 100;
+                            classPrestigeBonus[0].activityExp = 100;classPrestigeBonus[1].activityExp = 100;">
+                            Set training to 100x</button>
+                        </div> -->
+                        <div class="subHeader">Credits</div>
+                        <div id="credits">
+                            Music & Many Backgrounds, Luis Zuno, <a href="https://ansimuz.itch.io/"
+                                target=”_blank”>itch.io</a>
+                        </div>
 
                         <audio controls muted id="audioSource" style="display: none;">
-                            <source src="cyberpunk-street.mp3" type="audio/mp3">
+                            <source src="resources/music/cyberpunk-street.mp3" type="audio/mp3">
                             Your browser does not support the audio element.
                         </audio>
                     </div>
@@ -383,33 +481,21 @@
 </body>
 
 </html>
-<script src="worker.js"></script>
-<script src="constants.js"></script>
-<script src="colors.js"></script>
-<script src="playerstats.js"></script>
-<script src="enemies.js "></script>
-<script src="areas.js"></script>
-<script src="prestige.js"></script>
-<script src="story.js"></script>
-<script src="class.js"></script>
-<script src="fame.js"></script>
-<script src="training.js"></script>
-<script src="music.js"></script>
-<script src="offline.js"></script>
-<script src="main.js"></script>
-<!--客服 开始-->
-<script src="//g8hh.github.io/static/js/jquery.min.js"></script>
-<link rel="stylesheet" href="//g8hh.github.io/static/css/kf.css" type="text/css" media="screen" charset="utf-8">
-<script src="//g8hh.github.io/static/js/kf.js"></script>
-<!-- 客服 结束 -->
-<!--站长统计-->
-    <div style="display: none">
-<script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?828597e93cee632465679b7ef35edfd5";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>    </div>
+<script src="src/worker.js"></script>
+<script src="src/constants.js"></script>
+<script src="src/colors.js"></script>
+<script src="src/playerstats.js"></script>
+<script src="src/combat.js"></script>
+<script src="src/enemies.js "></script>
+<script src="src/allies.js "></script>
+<script src="src/areas.js"></script>
+<script src="src/story.js"></script>
+<script src="src/classTreeData.js"></script>
+<script src="src/classAbilityData.js"></script>
+<script src="src/class.js"></script>
+<script src="src/prestige.js"></script>
+<script src="src/fame.js"></script>
+<script src="src/training.js"></script>
+<script src="src/music.js"></script>
+<script src="src/offline.js"></script>
+<script src="src/main.js"></script>

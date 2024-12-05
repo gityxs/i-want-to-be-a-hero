@@ -260,7 +260,7 @@ var abilityLibrary = {
             'stun': 1,
         },
         time: 2000,
-        cooldownTime: 10000,
+        cooldownTime: 12000,
         range: [0, 60],
 
     },
@@ -388,11 +388,12 @@ var abilityLibrary = {
         cooldownTime: 0,
         range: [5, 0],
     },
+
     'shove': {
         type: 0, category: 'ranged', name: "Shove", iconName: "jab",
         baseDamage: 1, damageRatios: [.2, 0, 0, 0], damageRange: [1, 1],
         time: 3000, cooldownTime: 5000, range: [5, 5],
-        effects:{'stun': 0.5, 'knockback':10}
+        effects: { 'stun': 0.5, 'knockback': 10 }
     },
     'gatling': {
         type: 0, category: 'ranged', name: "Gatling", iconName: "handgun",
@@ -403,21 +404,21 @@ var abilityLibrary = {
         type: 0, category: 'ranged', name: "Gatling Salvo", iconName: "handgun",
         baseDamage: 0, damageRatios: [.3, .1, .1, 0], damageRange: [0.9, 1.1],
         time: 500, cooldownTime: 5000, range: [10, 50],
-        effects:{"repeat": 0.8}
+        effects: { "repeat": 0.8 }
     },
     'bladeArm': {
         type: 0, category: 'melee', name: "Blade Arm", iconName: "placeholder",
         baseDamage: 0, damageRatios: [.4, 0, 0, .4], damageRange: [0.9, 1.1],
         time: 2500, cooldownTime: 0, range: [5, 5],
-        effects:{"criticalChance": 0.2}
+        effects: { "criticalChance": 0.2 }
     },
     'bladeWhirlwind': {
         type: 0, category: 'melee', name: "Blade Whirlwind", iconName: "placeholder",
         baseDamage: 0, damageRatios: [.3, 0, 0, .1], damageRange: [0.9, 1.1],
         time: 200, cooldownTime: 5000, range: [10, 10],
-        effects:{"repeat": 0.8}
-    },
-};
+        effects: { "repeat": 0.8 }
+    }
+}
 
 var enemyData = {};
 
@@ -425,7 +426,7 @@ enemyData.criminal = {
     id: "criminal",
     name: "Purse thief",
     maxHealth: 2.5,
-    attributes: [.5, .5, 0, 1],
+    attributes: [1, .5, 2, 1],
     healthRegen: 0,
     expReward: 1,
     moneyReward: 0.03,
@@ -438,7 +439,7 @@ enemyData.thug = {
     id: "thug",
     name: "Thug",
     maxHealth: 15,
-    attributes: [5, 3, 1, 2],
+    attributes: [4, 3, 1, 2],
     healthRegen: 0,
     expReward: 5,
     moneyReward: 0.05,
@@ -452,7 +453,7 @@ enemyData.prisoner = {
     id: "prisoner",
     name: "Prisoner",
     maxHealth: 40,
-    attributes: [10, 10, 1, 10],
+    attributes: [1, 1, .5, 1],
     healthRegen: 0,
     expReward: 20,
     moneyReward: 0.1,
@@ -463,9 +464,10 @@ enemyData.prisoner = {
 };
 enemyData.prisoner9 = {
     id: "prisoner9",
+    rank: "boss",
     name: "Prisoner 9",
     maxHealth: 120,
-    attributes: [50, 50, 1, 5],
+    attributes: [3, 3, 1, 1],
     healthRegen: 0.005,
     expReward: 40,
     moneyReward: 0.5,
@@ -491,7 +493,7 @@ enemyData.infectedPrisoner = {
     id: "infectedPrisoner",
     name: "Strange Prisoner",
     maxHealth: 100,
-    attributes: [70, 90, 1, 30],
+    attributes: [2, 2, 1, 2],
     healthRegen: 0.005,
     expReward: 100,
     moneyReward: 1.5,
@@ -502,9 +504,10 @@ enemyData.infectedPrisoner = {
 };
 enemyData.experiment999 = {
     id: "experiment999",
+    rank: "boss",
     name: "Experiment #999",
     maxHealth: 350,
-    attributes: [200, 200, 10, 100],
+    attributes: [2, 1, 1, 2],
     healthRegen: 0.005,
     expReward: 250,
     moneyReward: 3,
@@ -517,7 +520,7 @@ enemyData.thug2 = {
     id: "thug2",
     name: "Hardened Thug",
     maxHealth: 300,
-    attributes: [200, 200, 25, 150],
+    attributes: [200, 200, 50, 150],
     healthRegen: 0,
     expReward: 100,
     moneyReward: 4,
@@ -530,7 +533,7 @@ enemyData.thug3 = {
     id: "thug3",
     name: "Armed Thug",
     maxHealth: 150,
-    attributes: [25, 100, 200, 300],
+    attributes: [100, 100, 150, 200],
     healthRegen: 0,
     expReward: 100,
     moneyReward: 4,
@@ -545,7 +548,7 @@ enemyData.thug4 = {
     id: "thug4",
     name: "Hardened Thug",
     maxHealth: 600,
-    attributes: [400, 400, 50, 300],
+    attributes: [400, 400, 100, 300],
     healthRegen: 0,
     expReward: 150,
     moneyReward: 5,
@@ -558,7 +561,7 @@ enemyData.thug5 = {
     id: "thug5",
     name: "Rifle Thug",
     maxHealth: 300,
-    attributes: [50, 150, 400, 600],
+    attributes: [1, 1, 2, 2],
     healthRegen: 0,
     expReward: 150,
     moneyReward: 5,
@@ -571,6 +574,7 @@ enemyData.thug5 = {
 };
 enemyData.don = {
     id: "don",
+    rank: "boss",
     name: "The Don",
     maxHealth: 1000,
     attributes: [1000, 1500, 1000, 1000],
@@ -586,6 +590,7 @@ enemyData.don = {
 };
 enemyData.donbodyguard = {
     id: "donbodyguard",
+    rank: "boss",
     name: "Don's Right Hand",
     maxHealth: 4000,
     attributes: [3000, 5000, 500, 2500],
@@ -599,6 +604,7 @@ enemyData.donbodyguard = {
 };
 enemyData.don2 = {
     id: "don2",
+    rank: "boss",
     name: "The Don",
     maxHealth: 2000,
     attributes: [2400, 3000, 2000, 3000],
@@ -616,7 +622,7 @@ enemyData.infusedthug = {
     id: "infusedthug",
     name: "Infused Thug",
     maxHealth: 4000,
-    attributes: [6000, 6000, 1000, 4000],
+    attributes: [6000, 5000, 2000, 4000],
     healthRegen: 0,
     expReward: 1500,
     moneyReward: 50,
@@ -636,12 +642,13 @@ enemyData.psychicthug = {
     reputationReward: 2,
     spriteFile: "psychicthug.png",
     portraitFile: "prisoner9Portrait.png",
-    moves: ['psionicBarrierAlly', 'telekineticProjectile', 'psychicShove', 'confuse', 'walk'],
+    moves: ['punch', 'psionicBarrierAlly', 'telekineticProjectile', 'psychicShove', 'confuse', 'walk'],
     engagementRange: 60,
     spawnDistance: 80,
 };
 enemyData.superthug = {
     id: "superthug",
+    rank: "boss",
     name: "Superthug",
     maxHealth: 11000,
     attributes: [25000, 20000, 4000, 20000],
@@ -684,10 +691,11 @@ enemyData.morphedthug = {
 };
 enemyData.crabman = {
     id: "crabman",
+    rank: "boss",
     name: "The Crabman",
     maxHealth: 70000,
-    attributes: [250000, 300000, 50000, 100000],
-    healthRegen: 0.0025,
+    attributes: [2.5, 3, 0.5, 1],
+    healthRegen: 0.01,
     expReward: 32000,
     moneyReward: 200,
     reputationReward: 10,
@@ -697,10 +705,11 @@ enemyData.crabman = {
 };
 enemyData.ultracrabman = {
     id: "ultracrabman",
+    rank: "boss",
     name: "The Ultra Crabman",
     maxHealth: 250000,
-    attributes: [2500000, 2000000, 10000, 300000],
-    healthRegen: 0.0025,
+    attributes: [2.5, 3, 0.5, 1],
+    healthRegen: 0.01,
     expReward: 250000,
     moneyReward: 300,
     reputationReward: 40,
@@ -708,4 +717,3 @@ enemyData.ultracrabman = {
     portraitFile: "prisoner9Portrait.png",
     moves: ['walk', 'crabWalk', 'punch', 'smash', 'groundStomp', 'mutantSlash', 'crabWaterJet'],
 };
-
